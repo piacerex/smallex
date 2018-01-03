@@ -4,7 +4,7 @@ defmodule Smallex.Mixfile do
   def project do
     [
       app: :smallex,
-      version: "0.0.2",
+      version: "0.0.3",
       elixir: "~> 1.5",
 		description: "Elixir small utilities", 
 		package: 
@@ -44,6 +44,9 @@ defmodule Smallex.Mixfile do
 			{ :memoize,             "~> 1.2.4" }, 
 			{ :logger_file_backend, "~> 0.0.10" }, 
 
+			{ :httpoison,           "~> 0.13.0" }, 
+			{ :poison,              "~> 3.1.0" }, 
+			{ :floki,               "~> 0.19.2" },
 
 			{ :combine,             "~> 0.10.0" }, 
 
