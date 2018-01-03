@@ -40,7 +40,7 @@ defmodule Smallex.Mixfile do
 
 			{ :nimble_csv,     "~> 0.4.0" }, 
 
-			{ :ecto,           "~> 2.2.7" }, 
+			{ :ecto,           "~> 2.2.6" }, 
 
 			{ :httpoison,      "~> 0.13.0" }, 
 			{ :poison,         "~> 3.1.0" }, 
