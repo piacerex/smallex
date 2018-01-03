@@ -28,28 +28,28 @@ defmodule Smallex.Mixfile do
   # Run "mix help deps" to learn about dependencies.
 	defp deps do
 		[
-			{ :ex_doc,         "~> 0.18.1", only: :dev, runtime: false }, 
-			{ :earmark,        "~> 1.2.4",  only: :dev }, 
-			{ :power_assert,   "~> 0.1.1",  only: :test }, 
-			{ :mix_test_watch, "~> 0.5.0",  only: :dev, runtime: false }, 
-			{ :dialyxir,       "~> 0.5.1",  only: :dev }, 
+			{ :ex_doc,              "~> 0.18.1", only: :dev, runtime: false }, 
+			{ :earmark,             "~> 1.2.4",  only: :dev }, 
+			{ :power_assert,        "~> 0.1.1",  only: :test }, 
+			{ :mix_test_watch,      "~> 0.5.0",  only: :dev, runtime: false }, 
+			{ :dialyxir,            "~> 0.5.1",  only: :dev }, 
 
-			{ :timex,          "~> 3.1.24" }, 
-			{ :math,           "~> 0.3.0" }, 
-			{ :complex_num,    "~> 1.0.0" }, 
+			{ :timex,               "~> 3.1.24" }, 
+			{ :math,                "~> 0.3.0" }, 
+			{ :complex_num,         "~> 1.0.0" }, 
 
-			{ :nimble_csv,     "~> 0.4.0" }, 
-			{ :ecto,           "~> 2.2.6" }, 
+			{ :nimble_csv,          "~> 0.4.0" }, 
+			{ :ecto,                "~> 2.2.6" }, 
 			{ :stash,               "~> 1.0.0" }, 
 			{ :memoize,             "~> 1.2.4" }, 
 			{ :logger_file_backend, "~> 0.0.10" }, 
 
 
-			{ :combine,        "~> 0.10.0" }, 
+			{ :combine,             "~> 0.10.0" }, 
 
-			{ :quantum,        "~> 2.2.0" }, 
+			{ :quantum,             "~> 2.2.0" }, 
 
-			{ :flow,           "~> 0.12.0" }, 
+			{ :flow,                "~> 0.12.0" }, 
 			{ :benchfella,          "~> 0.3.5" }, 
 		]
 	end
