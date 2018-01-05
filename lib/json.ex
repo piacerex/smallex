@@ -1,6 +1,10 @@
 defmodule Json do
+	@moduledoc """
+	Documentation for Json.
+	"""
+
 	@doc """
-	Call JSON API (header & ap_function are optional)
+	Call JSON API (header & map_function are optional)
 
 	## Examples
 		iex> Json.call( "https://api.github.com", "/rate_limit" ) |> Map.get( "rate" ) |> Map.get( "limit" )
