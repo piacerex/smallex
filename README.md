@@ -3,8 +3,14 @@
 [Smallex](https://hex.pm/packages/smallex) is a Elixir small utilities. Here is an example:
 
 ```elixir
-iex> Json.call( "https://api.github.com", "/rate_limit" ) |> Map.get( "rate" ) |> Map.get( "limit" )
+iex> Json.get( "https://api.github.com", "/rate_limit" )[ "rate" ][ "limit" ]
 60
+
+iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }" )[ "args" ]
+%{"param1" => "value1"}
+
+iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }" )[ "data" ]
+"{ data1:value1 }"
 ```
 
 See the [online documentation](https://hexdocs.pm/smallex).
@@ -16,10 +22,10 @@ Add to your ```mix.exs``` file:
 ```elixir
 def deps do
   [
-    { :smallex, "~> 0.0.5" }
+    { :smallex, "~> 0.0.6" }
   ]
 end
 ```
 
 ## License
-This project is licensed under the terms of the MIT license, see LICENSE.
+This project is licensed under the terms of the Apache 2.0 license, see LICENSE.

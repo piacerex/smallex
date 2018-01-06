@@ -4,13 +4,13 @@ defmodule Smallex.Mixfile do
   def project do
     [
       app: :smallex,
-      version: "0.0.5",
+      version: "0.0.6",
       elixir: "~> 1.5",
 		description: "Elixir small utilities", 
 		package: 
 		[
 			maintainers: [ "data-maestro" ], 
-			licenses:    [ "MIT" ], 
+			licenses:    [ "Apache 2.0" ], 
 			links:       %{ "GitHub" => "https://github.com/data-maestro/smallex" }, 
 		],
       start_permanent: Mix.env == :prod,

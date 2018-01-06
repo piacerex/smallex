@@ -4,19 +4,38 @@ defmodule Json do
 	"""
 
 	@doc """
-	Call JSON API (header & map_function are optional)
+	Get JSON API (header & map_function are optional)
 
 	## Examples
-		iex> Json.call( "https://api.github.com", "/rate_limit" ) |> Map.get( "rate" ) |> Map.get( "limit" )
+		iex> Json.get( "https://api.github.com", "/rate_limit" )[ "rate" ][ "limit" ]
 		60
 	"""
-	def call( domain, path, header \\ [], map_function \\ &nop/1 ) do
+	def get( domain, path, header \\ [], map_function \\ &nop/1 ) do
 		domain <> path
 		|> HTTPoison.get!( header )
-		|> body
+		|> get_body
 		|> Poison.decode!
 		|> map_function.()
 	end
-	def body( %{ status_code: 200, body: body } ), do: body
-	def nop( map_list ), do: map_list
+
+	@doc """
+	Post JSON API (header & map_function are optional)
+
+	## Examples
+		iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }" )[ "args" ]
+		%{"param1" => "value1"}
+
+		iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }" )[ "data" ]
+		"{ data1:value1 }"
+	"""
+	def post( domain, path, body, header \\ [], map_function \\ &nop/1 ) do
+		domain <> path
+		|> HTTPoison.post!( body, header )
+		|> get_body
+		|> Poison.decode!
+		|> map_function.()
+	end
+
+	defp get_body( %{ status_code: 200, body: body } ), do: body
+	defp nop( map_list ), do: map_list
 end
