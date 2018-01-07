@@ -90,5 +90,6 @@ defmodule Json do
 		|> map_function.()
 	end
 	defp get_body( %{ status_code: 200, body: body } ), do: body
+	defp get_body( %{ status_code: 204, body: body } ), do: body
 	defp nop( map_list ), do: map_list
 end
