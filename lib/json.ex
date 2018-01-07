@@ -1,6 +1,6 @@
 defmodule Json do
 	@moduledoc """
-	JSON API calllibrary (with parse support).
+	JSON API call library (with parse support).
 	"""
 
 	@doc """
@@ -62,25 +62,26 @@ defmodule Json do
 	Delete JSON API (header & map_function are optional)
 
 	## Examples
-		iex> Json.delete( "https://httpbin.org", "/delete?param1=value1" )[ "args" ]
+		iex> ( Json.delete( "https://httpbin.org", "/delete?param1=value1" ) |> Poison.decode! )[ "args" ]
 		%{"param1" => "value1"}
 	"""
-	def delete( domain, path, header \\ [], map_function \\ &nop/1 ) do
+	def delete( domain, path, header \\ [] ) do
 		domain <> path
 		|> HTTPoison.delete!( header )
-		|> parse( map_function )
+		|> get_body
 	end
 
 	@doc """
 	Head JSON API (header & map_function are optional)
 
 	## Examples
-		iex> Json.head( "https://httpbin.org", "/", [] ).status_code
-		200
+		iex> Json.head( "https://httpbin.org", "/", [] )
+		""
 	"""
 	def head( domain, path, header \\ [] ) do
 		domain <> path
 		|> HTTPoison.head!( header )
+		|> get_body
 	end
 
 	defp parse( response, map_function ) do
