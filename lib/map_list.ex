@@ -1,4 +1,7 @@
 defmodule MapList do
+	@moduledoc """
+	Map list library.
+	"""
 
 	def zip( map_list1, map_list2 ), do: Enum.into( List.zip( [ map_list1, map_list2 ] ), %{} )
 

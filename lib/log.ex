@@ -1,4 +1,8 @@
 defmodule Log do
+	@moduledoc """
+	Log library.
+	"""
+
 	require Logger
 	def  info( message ), do: Logger.info(  message )
 	def error( message ), do: Logger.error( message )
