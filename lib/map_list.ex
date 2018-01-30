@@ -16,7 +16,7 @@ defmodule MapList do
 		match_map_list ++ nomatch_map_list
 	end
 
-	def replacep( base_map_list, add_map_list, match_key ) do
+	def replace( base_map_list, add_map_list, match_key ) do
 		adds = add_map_list |> Enum.map( &( &1[ match_key ] ) )
 		match_map_list = base_map_list
 			|> Enum.filter( &( adds |> Enum.member?( &1[ match_key ] ) ) )
