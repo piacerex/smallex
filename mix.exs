@@ -4,7 +4,7 @@ defmodule Smallex.Mixfile do
   def project do
     [
       app: :smallex,
-      version: "0.1.2",
+      version: "0.1.3",
       elixir: "~> 1.5",
 		description: "Elixir small utilities", 
 		package: 
@@ -28,22 +28,23 @@ defmodule Smallex.Mixfile do
   # Run "mix help deps" to learn about dependencies.
 	defp deps do
 		[
-			{ :ex_doc,              "~> 0.18.1", only: :dev, runtime: false }, 
-			{ :earmark,             "~> 1.2.4",  only: :dev }, 
+			{ :ex_doc,              "~> 0.18.3", only: :dev, runtime: false }, 
+			{ :earmark,             "~> 1.2",    only: :dev }, 
 			{ :power_assert,        "~> 0.1.1",  only: :test }, 
-			{ :mix_test_watch,      "~> 0.5.0",  only: :dev, runtime: false }, 
+			{ :mix_test_watch,      "~> 0.6",    only: :dev, runtime: false }, 
 			{ :dialyxir,            "~> 0.5.1",  only: :dev }, 
 
-			{ :timex,               "~> 3.1.24" }, 
+			{ :timex,               "~> 3.3" }, 
 			{ :math,                "~> 0.3.0" }, 
-			{ :complex_num,         "~> 1.0.0" }, 
+			{ :complex_num,         "~> 1.1" }, 
 
-			{ :nimble_csv,          "~> 0.4.0" }, 
-			{ :ecto,                "~> 2.2.6" }, 
+			{ :excelion,            "~> 0.0.5" }, 
+			{ :csv,                 "~> 2.1" }, 
+			{ :ecto,                "~> 2.2" }, 
 			{ :logger_file_backend, "~> 0.0.10" }, 
 
-			{ :httpoison,           "~> 0.13.0" }, 
-			{ :poison,              "~> 3.1.0" }, 
+			{ :httpoison,           "~> 1.1" }, 
+			{ :poison,              "~> 3.1" }, 
 		]
 	end
 end

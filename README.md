@@ -22,7 +22,7 @@ Add to your ```mix.exs``` file:
 ```elixir
 def deps do
   [
-    { :smallex, "~> 0.1.2" }
+    { :smallex, "~> 0.1.3" }
   ]
 end
 ```
