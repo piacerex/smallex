@@ -4,7 +4,7 @@ defmodule Smallex.Mixfile do
   def project do
     [
       app: :smallex,
-      version: "0.1.3",
+      version: "0.1.4",
       elixir: "~> 1.5",
 		description: "Elixir small utilities", 
 		package: 
