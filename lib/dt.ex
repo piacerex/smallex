@@ -3,22 +3,36 @@ defmodule Dt do
 	DateTime utiity.
 	"""
 
-	def now_timestamp( date_sep \\ "", separate \\ "", time_sep \\ "", second_sep \\ "" ) do
-		Timex.now |> to_timestamp_string( date_sep, separate, time_sep, second_sep )
-	end
-	def to_timestamp_string( dt, date_sep \\ "", between_sep \\ "", time_sep \\ "", second_sep \\ "" ) do
-		ss = dt |> format_to_string( "{ss}" ) |> String.replace( ".", second_sep )
-		dt |> format_to_string( "{YYYY}#{ date_sep }{0M}#{ date_sep }{0D}#{ between_sep }{h24}#{ time_sep }{m}#{ time_sep }{s}#{ ss }" )
-	end
+	# https://hexdocs.pm/timex/Timex.Format.DateTime.Formatters.Strftime.html
+
+	def now_ym(),  do: Timex.now |> to_ym_string
+	def now_ymd(), do: Timex.now |> to_ymd_string
 
 	def diff_ymd_string( to, from, units ), do: Timex.diff( Dt.to_datetime( to ), to_datetime( from ), units )
 
-	def add_days( dt, days ), do: to_datetime( dt ) |> Timex.add( Timex.Duration.from_days( days ) ) |> ymd_string
+	def add_days( dt, days ), do: to_datetime( dt ) |> Timex.add( Timex.Duration.from_days( days ) ) |> to_ymd_string
 
 	def list_ymd( to, from ), do: if to < from, do: [], else: 0..diff_ymd_string( to, from, :days ) |> Enum.map( &( add_days( to, -&1 ) ) )
 
-	def format_to_string( dt, format_str, with_status \\ :no_status ) do
-		result = Timex.format( dt, format_str, :strftime )
+	@doc """
+	Datetime to string
+
+	## Examples
+		iex> Dt.to_string( ~N[2018-01-02 23:44:09.005], "%Y/%m/%d %H:%M:%S" )
+		"2018/01/02 23:44:09"
+		iex> Dt.to_string( ~N[2018-01-02 23:44:09.005], "%Y/%m/%d %H:%M:%S.%L" )
+		"2018/01/02 23:44:09.005"
+		iex> Dt.to_string( ~N[2018-01-02 23:44:09.005], "%Y/%m/%d %H:%M:%S", :with_status )
+		{ :ok, "2018/01/02 23:44:09" }
+	"""
+	def to_string( dt, format_str, with_status \\ :no_status ) do
+		ms_treated_format_str = if String.contains?( format_str, "%L" ) do
+			ms = dt |> Timex.format( "{ss}" ) |> Tpl.ok |> String.replace( ".", "" )
+			format_str |> String.replace( "%L", ms )
+		else
+			format_str
+		end
+		result = Timex.format( dt, ms_treated_format_str, :strftime )
 		if with_status == :no_status do
 			{ :ok, return } = result
 			return
@@ -26,7 +40,16 @@ defmodule Dt do
 			result
 		end
 	end
-	def format_from_string( dt_str, format_str, with_status \\ :no_status ) do
+	@doc """
+	Datetime from string
+
+	## Examples
+		iex> Dt.from_string( "2018/01/02 23:44:09", "%Y/%m/%d %H:%M:%S" )
+		~N[2018-01-02 23:44:09]
+		iex> Dt.from_string( "2018/01/02 23:44:09", "%Y/%m/%d %H:%M:%S", :with_status )
+		{ :ok, ~N[2018-01-02 23:44:09] }
+	"""
+	def from_string( dt_str, format_str, with_status \\ :no_status ) do
 		result = Timex.parse( dt_str, format_str, :strftime )
 		if with_status == :no_status do
 			{ :ok, return } = result
@@ -35,9 +58,6 @@ defmodule Dt do
 			result
 		end
 	end
-
-	def now_ym(),  do: Timex.now |> ym_string
-	def now_ymd(), do: Timex.now |> ymd_string
 
 	@doc """
 	Get datetime from string/tuple
@@ -154,7 +174,7 @@ defmodule Dt do
 			"%Y-%_m-%_dT%_H:%_M:%_SZ", 
 			"%Y-%_m-%_dT%_H:%_M:%_S.%_LZ", 
 		]
-		|> Enum.map( &( str |> format_from_string( &1, :with_status ) ) )
+		|> Enum.map( &( str |> from_string( &1, :with_status ) ) )
 		|> Enum.filter( &elem( &1, 0 ) == :ok )
 		|> List.first
 		|> Tpl.ok
@@ -189,19 +209,28 @@ defmodule Dt do
 	To yyyy/mm string
 
 	## Examples
-		iex> Dt.ym_string( ~N[2018-01-02 03:04:05] )
+		iex> Dt.to_ym_string( ~N[2018-01-02 03:04:05] )
 		"2018/01"
 	"""
-	def ym_string( dt ),  do: dt |> format_to_string( "%Y/%0m" )
+	def to_ym_string( dt ),  do: dt |> to_string( "%Y/%0m" )
 
 	@doc """
 	To yyyy/mm/dd string
 
 	## Examples
-		iex> Dt.ymd_string( ~N[2018-01-02 03:04:05] )
+		iex> Dt.to_ymd_string( ~N[2018-01-02 03:04:05] )
 		"2018/01/02"
 	"""
-	def ymd_string( dt ), do: dt |> format_to_string( "%Y/%0m/%0d" )
+	def to_ymd_string( dt ), do: dt |> to_string( "%Y/%0m/%0d" )
+
+	@doc """
+	To yyyy/mm/dd string
+
+	## Examples
+		iex> Dt.to_ymd_string( ~N[2018-01-02 03:04:05] )
+		"2018/01/02"
+	"""
+	def to_ymdhmsl( dt ), do: dt |> to_string( "%Y/%0m/%0d" )
 
 	@doc """
 	Hyphen to slash
