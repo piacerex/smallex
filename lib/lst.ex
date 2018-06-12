@@ -11,4 +11,15 @@ defmodule Lst do
 		"1, ab, 8, true"
 	"""
 	def to_csv( list ), do: list |> Enum.reduce( "", fn( x, acc ) -> "#{acc}, #{x}" end ) |> String.slice( 2..-1 )
+
+	@doc """
+	Calculate frequency of values ftom list
+
+	## Examples
+		iex> Lst.frequency( [ "abc", "abc", "xyz", "abc", "def", "xyz" ] )
+		%{ "abc" => 3, "def" => 1, "xyz" => 2 }
+		iex> Lst.frequency( [ %{ "a" => "abc" }, %{ "a" => "abc" }, %{ "a" => "xyz" }, %{ "a" => "abc" }, %{ "a" => "def" }, %{ "a" => "xyz" } ] )
+		%{ %{ "a" => "abc"} => 3, %{ "a" => "def" } => 1, %{ "a" => "xyz" } => 2 }
+	"""
+	def frequency( list ), do: list |> Enum.reduce( %{}, fn( key, value ) -> Map.update( value, key, 1, &( &1 + 1 ) ) end )
 end

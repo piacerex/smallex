@@ -4,12 +4,12 @@ defmodule Smallex.Mixfile do
   def project do
     [
       app: :smallex,
-      version: "0.1.5",
-      elixir: "~> 1.5",
+      version: "0.1.6",
+      elixir: "~> 1.6",
 		description: "Elixir small utilities", 
 		package: 
 		[
-			maintainers: [ "data-maestro" ], 
+			maintainers: [ "piacere-ex" ], 
 			licenses:    [ "Apache 2.0" ], 
 			links:       %{ "GitHub" => "https://github.com/data-maestro/smallex" }, 
 		],

@@ -3,8 +3,22 @@ defmodule MapList do
 	Map list library.
 	"""
 
+	@doc """
+	Zip two lists to map
+
+	## Examples
+		iex> MapList.zip( [ "a", "b", "c" ], [ 1, 2, 3 ] )
+		%{ "a" => 1, "b" => 2, "c" => 3 }
+	"""
 	def zip( map_list1, map_list2 ), do: Enum.into( List.zip( [ map_list1, map_list2 ] ), %{} )
 
+	@doc """
+	Outer join keys to map-list on same key-value pair from another
+
+	## Examples
+		iex> MapList.merge( [ %{ "a" => "key1", "b" => 12 }, %{ "a" => "key2", "b" => 22 } ], [ %{ "a" => "key1", "c" => 13 }, %{ "a" => "key3", "c" => 23 } ], "a", "no_match" )
+		[ %{ "a" => "key1", "b" => 12, "c" => 13 }, %{ "a" => "key2", "b" => 22, "c" => "no_match" } ]
+	"""
 	def merge( base_map_list, add_map_list, match_key, no_match_value ) do
 		empty_add_map = make_empty_map_without_key( add_map_list, match_key, no_match_value )
 		adds = add_map_list |> Enum.map( &( &1[ match_key ] ) )
@@ -16,6 +30,13 @@ defmodule MapList do
 		match_map_list ++ nomatch_map_list
 	end
 
+	@doc """
+	Inner join keys to map-list on same key-value pair from another
+
+	## Examples
+		iex> MapList.replace( [ %{ "a" => "key1", "b" => 12 }, %{ "a" => "key2", "b" => 22 } ], [ %{ "a" => "key1", "c" => 13 }, %{ "a" => "key3", "c" => 23 } ], "a" )
+		[ %{ "a" => "key1", "b" => 12, "c" => 13 }, %{ "a" => "key2", "b" => 22 } ]
+	"""
 	def replace( base_map_list, add_map_list, match_key ) do
 		adds = add_map_list |> Enum.map( &( &1[ match_key ] ) )
 		match_map_list = base_map_list
@@ -41,12 +62,5 @@ defmodule MapList do
 			|> Map.delete( match_key )
 			|> Map.keys
 		zip( keys, List.duplicate( no_match_value, Enum.count( keys ) ) )
-	end
-
-	def frequency( map_list ), do: map_list |> Enum.reduce( %{}, fn( key, new_map ) -> Map.update( new_map, key, 1, &( &1 + 1 ) ) end )
-
-	def dig( map_list, key ) do
-		%{ ^key => value } = map_list
-		value
 	end
 end
