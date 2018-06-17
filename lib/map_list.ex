@@ -4,13 +4,22 @@ defmodule MapList do
 	"""
 
 	@doc """
-	Zip two lists to map
+	Zip two lists to map( key => value style)
 
 	## Examples
 		iex> MapList.zip( [ "a", "b", "c" ], [ 1, 2, 3 ] )
 		%{ "a" => 1, "b" => 2, "c" => 3 }
 	"""
-	def zip( map_list1, map_list2 ), do: Enum.into( List.zip( [ map_list1, map_list2 ] ), %{} )
+	def zip( list1, list2 ), do: Enum.zip( list1, list2 ) |> Enum.into( %{} )
+
+	@doc """
+	Zip two lists to map( key: value style)
+
+	## Examples
+		iex> MapList.zip_atom( [ "a", "b", "c" ], [ 1, 2, 3 ] )
+		%{ a: 1, b: 2, c: 3 }
+	"""
+	def zip_atom( list1, list2 ), do: Enum.zip( list1, list2 ) |> Enum.reduce( %{}, fn { k, v }, acc -> Map.put( acc, String.to_atom( k ), v ) end )
 
 	@doc """
 	Outer join keys to map-list on same key-value pair from another

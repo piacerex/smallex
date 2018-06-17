@@ -78,6 +78,9 @@ iex> Lst.frequency( [ "abc", "abc", "xyz", "abc", "def", "xyz" ] )
 iex> MapList.zip( [ "a", "b", "c" ], [ 1, 2, 3 ] )
 %{ "a" => 1, "b" => 2, "c" => 3 }
 
+iex> MapList.zip_atom( [ "a", "b", "c" ], [ 1, 2, 3 ] )
+%{ a: 1, b: 2, c: 3 }
+
 iex> MapList.merge( [ %{ "a" => "key1", "b" => 12 }, %{ "a" => "key2", "b" => 22 } ], [ %{ "a" => "key1", "c" => 13 }, %{ "a" => "key3", "c" => 23 } ], "a", "no_match" )
 [ %{ "a" => "key1", "b" => 12, "c" => 13 }, %{ "a" => "key2", "b" => 22, "c" => "no_match" } ]
 
@@ -103,7 +106,7 @@ Add to your ```mix.exs``` file:
 ```elixir
 def deps do
   [
-    { :smallex, "~> 0.1.6" }
+    { :smallex, "~> 0.1.7" }
   ]
 end
 ```
