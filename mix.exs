@@ -4,7 +4,7 @@ defmodule Smallex.Mixfile do
   def project do
     [
       app: :smallex,
-      version: "0.1.7",
+      version: "0.1.8",
       elixir: "~> 1.6",
 		description: "Elixir small utilities", 
 		package: 
@@ -45,6 +45,8 @@ defmodule Smallex.Mixfile do
 
 			{ :httpoison,           "~> 1.1" }, 
 			{ :poison,              "~> 3.1" }, 
+
+			{ :cors_plug,           "~> 1.5" }, 
 		]
 	end
 end

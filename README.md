@@ -78,8 +78,20 @@ iex> Lst.frequency( [ "abc", "abc", "xyz", "abc", "def", "xyz" ] )
 iex> MapList.zip( [ "a", "b", "c" ], [ 1, 2, 3 ] )
 %{ "a" => 1, "b" => 2, "c" => 3 }
 
-iex> MapList.zip_atom( [ "a", "b", "c" ], [ 1, 2, 3 ] )
+iex> MapList.zip( [ "a", "b", "c" ], [ 1, 2, 3 ], :atom )
 %{ a: 1, b: 2, c: 3 }
+
+iex> MapList.columns_rows( [ "c1", "c2", "c3" ], [ [ "v1", 2, true ], [ "v2", 5, false ] ] )
+[ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ]
+
+iex> MapList.columns_rows( [ "c1", "c2", "c3" ], [ [ "v1", 2, true ], [ "v2", 5, false ] ], :atom )
+[ %{ c1: "v1", c2: 2, c3: true }, %{ c1: "v2", c2: 5, c3: false } ]
+
+iex> MapList.first_columns_after_rows( [ [ "c1", "c2", "c3" ], [ "v1", 2, true ], [ "v2", 5, false ] ] )
+[ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ]
+
+iex> MapList.first_columns_after_rows( [ [ "c1", "c2", "c3" ], [ "v1", 2, true ], [ "v2", 5, false ] ], :atom )
+[ %{ c1: "v1", c2: 2, c3: true }, %{ c1: "v2", c2: 5, c3: false } ]
 
 iex> MapList.merge( [ %{ "a" => "key1", "b" => 12 }, %{ "a" => "key2", "b" => 22 } ], [ %{ "a" => "key1", "c" => 13 }, %{ "a" => "key3", "c" => 23 } ], "a", "no_match" )
 [ %{ "a" => "key1", "b" => 12, "c" => 13 }, %{ "a" => "key2", "b" => 22, "c" => "no_match" } ]
@@ -106,7 +118,7 @@ Add to your ```mix.exs``` file:
 ```elixir
 def deps do
   [
-    { :smallex, "~> 0.1.7" }
+    { :smallex, "~> 0.1.8" }
   ]
 end
 ```

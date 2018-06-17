@@ -4,22 +4,45 @@ defmodule MapList do
 	"""
 
 	@doc """
-	Zip two lists to map( key => value style)
+	Zip two lists to map
 
 	## Examples
 		iex> MapList.zip( [ "a", "b", "c" ], [ 1, 2, 3 ] )
 		%{ "a" => 1, "b" => 2, "c" => 3 }
-	"""
-	def zip( list1, list2 ), do: Enum.zip( list1, list2 ) |> Enum.into( %{} )
-
-	@doc """
-	Zip two lists to map( key: value style)
-
-	## Examples
-		iex> MapList.zip_atom( [ "a", "b", "c" ], [ 1, 2, 3 ] )
+		iex> MapList.zip( [ "a", "b", "c" ], [ 1, 2, 3 ], :atom )
 		%{ a: 1, b: 2, c: 3 }
 	"""
-	def zip_atom( list1, list2 ), do: Enum.zip( list1, list2 ) |> Enum.reduce( %{}, fn { k, v }, acc -> Map.put( acc, String.to_atom( k ), v ) end )
+	def zip( list1, list2, :atom ),    do: Enum.zip( list1, list2 ) |> Enum.reduce( %{}, fn { k, v }, acc -> Map.put( acc, String.to_atom( k ), v ) end )
+	def zip( list1, list2, :no_atom ), do: Enum.zip( list1, list2 ) |> Enum.into( %{} )
+	def zip( list1, list2 ),           do: zip( list1, list2, :no_atom )
+
+	@doc """
+	Zip columns list and list of rows list
+
+	## Examples
+		iex> MapList.columns_rows( [ "c1", "c2", "c3" ], [ [ "v1", 2, true ], [ "v2", 5, false ] ] )
+		[ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ]
+		iex> MapList.columns_rows( [ "c1", "c2", "c3" ], [ [ "v1", 2, true ], [ "v2", 5, false ] ], :atom )
+		[ %{ c1: "v1", c2: 2, c3: true }, %{ c1: "v2", c2: 5, c3: false } ]
+	"""
+	def columns_rows( columns, rows, :atom ),    do: rows |> Enum.map( & MapList.zip( columns, &1, :atom ) )
+	def columns_rows( columns, rows, :no_atom ), do: rows |> Enum.map( & MapList.zip( columns, &1 ) )
+	def columns_rows( columns, rows ),           do: columns_rows( columns, rows, :no_atom )
+
+	@doc """
+	Zip columns list(first line) and list of rows list(after second lines)
+
+	## Examples
+		iex> MapList.first_columns_after_rows( [ [ "c1", "c2", "c3" ], [ "v1", 2, true ], [ "v2", 5, false ] ] )
+		[ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ]
+		iex> MapList.first_columns_after_rows( [ [ "c1", "c2", "c3" ], [ "v1", 2, true ], [ "v2", 5, false ] ], :atom )
+		[ %{ c1: "v1", c2: 2, c3: true }, %{ c1: "v2", c2: 5, c3: false } ]
+	"""
+	def first_columns_after_rows( columns_rows, with_atom \\ :no_atom ) do
+		columns = columns_rows |> List.first
+		rows    = columns_rows |> Enum.drop( 1 )
+		columns_rows( columns, rows, with_atom )
+	end
 
 	@doc """
 	Outer join keys to map-list on same key-value pair from another
