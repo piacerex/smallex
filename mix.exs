@@ -4,7 +4,7 @@ defmodule Smallex.Mixfile do
   def project do
     [
       app: :smallex,
-      version: "0.1.8",
+      version: "0.1.9",
       elixir: "~> 1.6",
 		description: "Elixir small utilities", 
 		package: 
@@ -35,18 +35,10 @@ defmodule Smallex.Mixfile do
 			{ :dialyxir,            "~> 0.5.1",  only: :dev }, 
 
 			{ :timex,               "~> 3.3" }, 
-			{ :math,                "~> 0.3.0" }, 
-			{ :complex_num,         "~> 1.1" }, 
-
-			{ :excelion,            "~> 0.0.5" }, 
-			{ :csv,                 "~> 2.1" }, 
-			{ :ecto,                "~> 2.2" }, 
-			{ :logger_file_backend, "~> 0.0.10" }, 
+			{ :decimal,             "~> 1.0" }, 
 
 			{ :httpoison,           "~> 1.1" }, 
 			{ :poison,              "~> 3.1" }, 
-
-			{ :cors_plug,           "~> 1.5" }, 
 		]
 	end
 end

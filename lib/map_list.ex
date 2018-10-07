@@ -12,7 +12,7 @@ defmodule MapList do
 		iex> MapList.zip( [ "a", "b", "c" ], [ 1, 2, 3 ], :atom )
 		%{ a: 1, b: 2, c: 3 }
 	"""
-	def zip( list1, list2, :atom ),    do: Enum.zip( list1, list2 ) |> Enum.reduce( %{}, fn { k, v }, acc -> Map.put( acc, String.to_atom( k ), v ) end )
+	def zip( list1, list2, :atom ),    do: Enum.zip( list1, list2 ) |> Enum.reduce( %{}, fn( { k, v }, acc ) -> Map.put( acc, String.to_atom( k ), v ) end )
 	def zip( list1, list2, :no_atom ), do: Enum.zip( list1, list2 ) |> Enum.into( %{} )
 	def zip( list1, list2 ),           do: zip( list1, list2, :no_atom )
 

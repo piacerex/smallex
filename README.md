@@ -3,6 +3,36 @@
 [Smallex](https://hex.pm/packages/smallex) is a Elixir small utilities. Here is an example:
 
 ```elixir
+iex> Type.is( nil )
+"nil"
+
+iex> Type.is( "v1" )
+"String"
+
+iex> Type.is( "2" )
+"Integer"
+
+iex> Type.is( 2 )
+"Integer"
+
+iex> Type.is( "true" )
+"Boolean"
+
+iex> Type.is( true )
+"Boolean"
+
+iex> Type.is( "12.34" )
+"Float"
+
+iex> Type.is( 12.34 )
+"Float"
+
+iex> Type.is( %{ "cs" => "v1", "ci" => "2", "cb" => "true", "cf" => "12.34" } )
+%{ "cs" => "String", "ci" => "Integer", "cb" => "Boolean", "cf" => "Float" }
+
+iex> Type.is( %{ "cs" => "v1", "ci" => 2, "cb" => true, "cf" => 12.34 } )
+%{ "cs" => "String", "ci" => "Integer", "cb" => "Boolean", "cf" => "Float" }
+
 iex> Dt.to_datetime( "2018/1" )
 ~N[2018-01-01 00:00:00]
 
@@ -118,7 +148,7 @@ Add to your ```mix.exs``` file:
 ```elixir
 def deps do
   [
-    { :smallex, "~> 0.1.8" }
+    { :smallex, "~> 0.1.9" }
   ]
 end
 ```
