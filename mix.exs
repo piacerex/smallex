@@ -28,7 +28,7 @@ defmodule Smallex.Mixfile do
   # Run "mix help deps" to learn about dependencies.
 	defp deps do
 		[
-			{ :ex_doc,              "~> 0.18.3", only: :dev, runtime: false }, 
+			{ :ex_doc,              "~> 0.19",   only: :dev, runtime: false }, 
 			{ :earmark,             "~> 1.2",    only: :dev }, 
 			{ :power_assert,        "~> 0.1.1",  only: :test }, 
 			{ :mix_test_watch,      "~> 0.6",    only: :dev, runtime: false }, 
