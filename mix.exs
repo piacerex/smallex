@@ -4,7 +4,7 @@ defmodule Smallex.Mixfile do
   def project do
     [
       app: :smallex,
-      version: "0.1.9",
+      version: "0.2.0",
       elixir: "~> 1.6",
 		description: "Elixir small utilities", 
 		package: 
@@ -39,6 +39,10 @@ defmodule Smallex.Mixfile do
 
 			{ :httpoison,           "~> 1.1" }, 
 			{ :poison,              "~> 3.1" }, 
+
+			{ :csv,                 "~> 2.1" }, 
+			{ :excelion,            "~> 0.0.5" }, 
+			{ :statistics,          "~> 0.5.1" }, 
 		]
 	end
 end

@@ -10,10 +10,10 @@ defmodule Json do
 		iex> Json.get( "https://api.github.com", "/rate_limit" )[ "rate" ][ "limit" ]
 		60
 	"""
-	def get( domain, path, header \\ [], map_function \\ &nop/1 ) do
+	def get( domain, path, header \\ [] ) do
 		domain <> path
 		|> HTTPoison.get!( header )
-		|> parse( map_function )
+		|> parse
 	end
 
 	@doc """
@@ -26,10 +26,10 @@ defmodule Json do
 		iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }" )[ "data" ]
 		"{ data1:value1 }"
 	"""
-	def post( domain, path, body, header \\ [], map_function \\ &nop/1 ) do
+	def post( domain, path, body, header \\ [] ) do
 		domain <> path
 		|> HTTPoison.post!( body, header )
-		|> parse( map_function )
+		|> parse
 	end
 
 	@doc """
@@ -39,10 +39,10 @@ defmodule Json do
 		iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ data1:value1 }" )[ "args" ]
 		%{"param1" => "value1"}
 	"""
-	def put( domain, path, body, header \\ [], map_function \\ &nop/1 ) do
+	def put( domain, path, body, header \\ [] ) do
 		domain <> path
 		|> HTTPoison.put!( body, header )
-		|> parse( map_function )
+		|> parse
 	end
 
 	@doc """
@@ -52,10 +52,10 @@ defmodule Json do
 		iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ data1:value1 }" )[ "args" ]
 		%{"param1" => "value1"}
 	"""
-	def patch( domain, path, body, header \\ [], map_function \\ &nop/1 ) do
+	def patch( domain, path, body, header \\ [] ) do
 		domain <> path
 		|> HTTPoison.patch!( body, header )
-		|> parse( map_function )
+		|> parse
 	end
 
 	@doc """
@@ -84,13 +84,12 @@ defmodule Json do
 		|> get_body
 	end
 
-	defp parse( response, map_function ) do
+	defp parse( response ) do
 		response
 		|> get_body
 		|> Poison.decode!
-		|> map_function.()
 	end
 	defp get_body( %{ status_code: 200, body: body } ), do: body
+	defp get_body( %{ status_code: 201, body: body } ), do: body
 	defp get_body( %{ status_code: 204, body: body } ), do: body
-	defp nop( map_list ), do: map_list
 end
