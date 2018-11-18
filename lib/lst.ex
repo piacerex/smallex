@@ -53,4 +53,16 @@ defmodule Lst do
 	def columns_rows( columns, rows, :atom ),    do: rows |> Enum.map( & zip( columns, &1, :atom ) )
 	def columns_rows( columns, rows, :no_atom ), do: rows |> Enum.map( & zip( columns, &1 ) )
 	def columns_rows( columns, rows ),           do: columns_rows( columns, rows, :no_atom )
+
+	@doc """
+	Separate
+
+	## Examples
+		iex> Lst.separate( [ [ "c1", "c2", "c3" ], [ "v1", 2, true ], [ "v2", 5, false ] ], "columns", "rows" )
+		%{ "columns" => [ "c1", "c2", "c3" ], "rows" => [ [ "v1", 2, true ], [ "v2", 5, false ] ] }
+	"""
+	def separate( list, head_name, tail_name ) do
+		[ head | tail ] = list
+		%{ head_name => head, tail_name => tail }
+	end
 end

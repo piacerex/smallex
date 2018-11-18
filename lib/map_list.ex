@@ -111,4 +111,42 @@ defmodule MapList do
 			|> Map.keys
 		Lst.zip( keys, List.duplicate( no_match_value, Enum.count( keys ) ) )
 	end
+
+	@doc """
+	get_dummies
+
+	## Examples
+		iex> MapList.get_dummies( [ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ], [ "c1" ] )
+		[ %{ "c1" => 0, "c2" => 2, "c3" => true }, %{ "c1" => 1, "c2" => 5, "c3" => false } ]
+		iex> MapList.get_dummies( [ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ], [ "c1", "c2" ] )
+		[ %{ "c1" => 0, "c2" => 0, "c3" => true }, %{ "c1" => 1, "c2" => 1, "c3" => false } ]
+	"""
+	def get_dummies( map_list, columns ) do
+		columns
+		|> Enum.reduce( map_list, fn column, acc -> 
+			categories = acc |> Enum.map( &( &1[ column ] ) ) |> Enum.uniq |> Enum.with_index |> Enum.into( %{} )
+			acc |> Enum.map( &( Map.put( &1, column, categories[ &1[ column ] ] ) ) )
+		end )
+#		[ column ] = columns
+#		categories = map_list |> Enum.map( &( &1[ column ] ) ) |> Enum.uniq |> Enum.with_index |> Enum.into( %{} )
+#		map_list |> Enum.map( &( Map.put( &1, column, categories[ &1[ column ] ] ) ) )
+	end
+
+	@doc """
+	imputer
+
+	## Examples
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "" } ], [ "c2" ] )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 3.5 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ] )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 3.5 } ]
+	"""
+	def imputer( map_list, columns, _strategy \\ "mean" ) do  # TODO: to multi column, to strategy variation
+		
+		columns
+		|> Enum.reduce( map_list, fn column, acc -> 
+			mean = acc |> Enum.map( &( &1[ column ] ) |> Type.to_number ) |> Enum.filter( &( &1 != nil ) ) |> Statistics.mean
+			acc |> Enum.map( &( if &1[ column ] |> Type.is_empty, do: Map.put( &1, column, mean ), else: &1 ) )
+		end )
+	end
 end
