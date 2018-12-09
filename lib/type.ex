@@ -31,11 +31,11 @@ defmodule Type do
 		%{ "cs" => "String", "ci" => "Integer", "cb" => "Boolean", "cf" => "Float" }
 		iex> Type.is( %{ "cs" => "v1", "ci" => 2, "cb" => true, "cf" => 12.34 } )
 		%{ "cs" => "String", "ci" => "Integer", "cb" => "Boolean", "cf" => "Float" }
+		iex> Type.is( [ "v1", 2, true, 12.34 ] )
+		[ "String", "Integer", "Boolean", "Float" ]
 	"""
-	def is( map ) when is_map( map ) do
-		map
-		|> Enum.reduce( %{}, fn( { k, v }, acc ) -> Map.put( acc, k, v |> is ) end )
-	end
+	def is( map )  when is_map( map ),   do: map  |> Enum.reduce( %{}, fn { k, v }, acc -> Map.put( acc, k, is( v ) ) end )
+	def is( list ) when is_list( list ), do: list |> Enum.map( &is( &1 ) )
 	def is( nil ), do: "nil"
 	def is( value ) when is_binary( value ) do
 		cond do

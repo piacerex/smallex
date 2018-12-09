@@ -17,8 +17,22 @@ defmodule Fl do
 		"
 		iex> File.rm!( "test/sample.csv" )
 		:ok
+
+		iex> [] |> Fl.write_map_list!( "test/sample2.csv", :no_quote )
+		[] 
+		iex> File.read!( "test/sample2.csv" )
+		""
+		iex> File.rm!( "test/sample2.csv" )
+		:ok
 	"""
-	def write_map_list!( [ head | _tail ] = map_list, path, option \\ :quote, modes \\ [] ) when is_map( head ) do
+	def write_map_list!( map_list, path, option \\ :quote, modes \\ [] ) do
+		_write_map_list!( map_list, path, option, modes )
+	end
+	defp _write_map_list!( [], path, _option, modes ) do
+		File.write!( path, "", modes )
+		[]
+	end
+	defp _write_map_list!( [ head | _tail ] = map_list, path, option, modes ) when is_map( head ) do
 		File.write!( path, map_list |> MapList.to_csv( option ), modes )
 		map_list
 	end
