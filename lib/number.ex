@@ -28,7 +28,7 @@ defmodule Number do
 		123
 		iex> Number.to_number( 123.456 )
 		123.456
-		iex> Number.to_number( Decimal.new( 123456.78 ) )
+		iex> Number.to_number( Decimal.from_float( 123456.78 ) )
 		123456.78
 		iex> Number.to_number( "123456.78" )
 		123456.78
@@ -48,7 +48,7 @@ defmodule Number do
 		"123.46"
 		iex> Number.to_string( 123.456, 1 )
 		"123.5"
-		iex> Number.to_string( Decimal.new( 123.456 ) )
+		iex> Number.to_string( Decimal.from_float( 123.456 ) )
 		"123.456"
 		iex> Number.to_string( "123.456" )
 		"123.456"
@@ -113,7 +113,7 @@ defmodule Number do
 		"1,234,567.890,123"
 		iex> Number.add_comma( 1234567.890123 )
 		"1,234,567.89"
-		iex> Number.add_comma( Decimal.new( 123456.78 ) )
+		iex> Number.add_comma( Decimal.from_float( 123456.78 ) )
 		"123,456.78"
 		iex> Number.add_comma( "123456.78" )
 		"123,456.78"
@@ -129,7 +129,7 @@ defmodule Number do
 		1234
 		iex> Number.to_integer( 1234.56 )
 		1234
-		iex> Number.to_integer( Decimal.new( 1234.56 ) )
+		iex> Number.to_integer( Decimal.from_float( 1234.56 ) )
 		1234
 		iex> Number.to_integer( "1234.56" )
 		1234
@@ -147,9 +147,9 @@ defmodule Number do
 		"12.3%"
 		iex> Number.to_percent( 0.123456 )
 		"12.35%"
-		iex> Number.to_percent( Decimal.new( 0.123 ) )
+		iex> Number.to_percent( Decimal.from_float( 0.123 ) )
 		"12.3%"
-		iex> Number.to_percent( Decimal.new( 0.123456 ) )
+		iex> Number.to_percent( Decimal.from_float( 0.123456 ) )
 		"12.35%"
 		iex> Number.to_percent( "0.123" )
 		"12.3%"

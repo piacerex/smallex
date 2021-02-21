@@ -7,8 +7,8 @@ defmodule MapList do
 	To CSV (Pickup keys from first line)
 
 	## Examples (Comment out as doctest does not work)
-		# iex> MapList.to_csv( [ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ] )
-		# "c1, c2, c3\n\"v1\", \"2\", \"true\"\n\"v2\", \"5\", \"false\"\n"
+		#iex> MapList.to_csv( [ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ] )
+		#"c1,c2,c3\n\"v1\",\"2\",\"true\"\n\"v2\",\"5\",\"false\"\n"
 	"""
 	def to_csv( map_list, option \\ :quote ) do
 		columns = ( map_list |> List.first |> Map.keys |> Lst.to_csv ) <> "\n"
@@ -113,13 +113,15 @@ defmodule MapList do
 	end
 
 	@doc """
-	get_dummies
+	Get dummies
 
 	## Examples
 		iex> MapList.get_dummies( [ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ], [ "c1" ] )
 		[ %{ "c1" => 0, "c2" => 2, "c3" => true }, %{ "c1" => 1, "c2" => 5, "c3" => false } ]
 		iex> MapList.get_dummies( [ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ], [ "c1", "c2" ] )
 		[ %{ "c1" => 0, "c2" => 0, "c3" => true }, %{ "c1" => 1, "c2" => 1, "c3" => false } ]
+		iex> MapList.get_dummies( [ %{ "c1" => "v1", "c2" => 2, "c3" => true }, %{ "c1" => "v2", "c2" => 5, "c3" => false } ], [ "c1", "c3" ] )
+		[ %{ "c1" => 0, "c2" => 2, "c3" => 0 }, %{ "c1" => 1, "c2" => 5, "c3" => 1 } ]
 	"""
 	def get_dummies( map_list, columns ) do
 		columns
@@ -127,26 +129,79 @@ defmodule MapList do
 			categories = acc |> Enum.map( &( &1[ column ] ) ) |> Enum.uniq |> Enum.with_index |> Enum.into( %{} )
 			acc |> Enum.map( &( Map.put( &1, column, categories[ &1[ column ] ] ) ) )
 		end )
-#		[ column ] = columns
-#		categories = map_list |> Enum.map( &( &1[ column ] ) ) |> Enum.uniq |> Enum.with_index |> Enum.into( %{} )
-#		map_list |> Enum.map( &( Map.put( &1, column, categories[ &1[ column ] ] ) ) )
 	end
 
 	@doc """
-	imputer
+	Imputer
 
 	## Examples
-		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "" } ], [ "c2" ] )
-		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 3.5 } ]
 		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ] )
 		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 3.5 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ], nil, "avg" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 3.5 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ], nil, "mean" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 3.5 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 7 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ], nil, "median" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 7 }, %{ "c1" => "v3", "c2" => 4.5 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ], nil, "max" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 5 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ], nil, "min" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 2 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ], nil, "stdev" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 1.5 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "" } ], [ "c2" ], "" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 3.5 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ], "" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 3.5 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "" } ], [ "c2" ] )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "" } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2", "c1" ] )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 3.5 } ]
+		iex> MapList.imputer( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "" } ], [ "c2", "c1" ], "" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => 3.5 } ]
 	"""
-	def imputer( map_list, columns, _strategy \\ "mean" ) do  # TODO: to multi column, to strategy variation
-		
+	def imputer( map_list, columns, missing \\ nil, strategy \\ "avg" ) do
+		function = cond do
+			strategy == "avg"       -> &Statistics.mean/1
+			strategy == "mean"      -> &Statistics.mean/1
+			strategy == "median"    -> &Statistics.median/1
+			strategy == "max"       -> &Statistics.max/1
+			strategy == "min"       -> &Statistics.min/1
+			strategy == "sum"       -> &Statistics.sum/1
+			strategy == "mode"      -> &Statistics.mode/1
+			strategy == "frequence" -> &Statistics.mode/1
+			strategy == "stdev"     -> &Statistics.stdev/1
+			strategy == "skew"      -> &Statistics.skew/1
+			strategy == "variance"  -> &Statistics.variance/1
+			strategy == "zscore"    -> &Statistics.zscore/1
+		end
 		columns
 		|> Enum.reduce( map_list, fn column, acc -> 
-			mean = acc |> Enum.map( &( &1[ column ] ) |> Type.to_number ) |> Enum.filter( &( &1 != nil ) ) |> Statistics.mean
-			acc |> Enum.map( &( if &1[ column ] |> Type.is_empty, do: Map.put( &1, column, mean ), else: &1 ) )
+			fill = acc |> Enum.map( &( &1[ column ] ) |> Type.to_number ) |> Enum.filter( &( &1 != nil && &1 != missing ) ) |> function.()
+			acc |> Enum.map( &( Map.update!( &1, column, fn v -> if ( v != nil && v != missing ), do: v, else: fill end ) ) )
 		end )
 	end
+
+	@doc """
+	Fill
+
+	## Examples
+		iex> MapList.fill( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ], "fl" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "fl" } ]
+		iex> MapList.fill( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2" ], "fl", "" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "fl" } ]
+		iex> MapList.fill( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "" } ], [ "c2" ], "fl", "" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "fl" } ]
+		iex> MapList.fill( [ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "" } ], [ "c2" ], "fl" )
+		[ %{ "c1" => "v1", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "" } ]
+		iex> MapList.fill( [ %{ "c1" => nil, "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => nil } ], [ "c2", "c1" ], "fl" )
+		[ %{ "c1" => "fl", "c2" => 2 }, %{ "c1" => "v2", "c2" => 5 }, %{ "c1" => "v3", "c2" => "fl" } ]
+	"""
+	def fill( map_list, columns, fill, missing \\ nil ) do
+		columns
+		|> Enum.reduce( map_list, fn column, acc -> 
+			acc |> Enum.map( &( Map.update!( &1, column, fn v -> if ( v != nil && v != missing ), do: v, else: fill end ) ) )
+		end )
+	end
+
 end

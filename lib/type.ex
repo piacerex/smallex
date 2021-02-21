@@ -39,32 +39,38 @@ defmodule Type do
 	def is( nil ), do: "nil"
 	def is( value ) when is_binary( value ) do
 		cond do
-			is_boolean_string( value )      -> "Boolean"
-			is_float_string_safe( value   ) -> "Float"
-			is_integer_string_safe( value ) -> "Integer"
+			is_boolean_include_string( value )      -> "Boolean"
+			is_float_include_string( value   ) -> "Float"
+			is_integer_include_string( value ) -> "Integer"
 			true                            -> "String"
 		end
 	end
 	def is( value ) when is_boolean( value ), do: "Boolean"
 	def is( value ) when is_float( value ),   do: "Float"
 	def is( value ) when is_integer( value ), do: "Integer"
-	def is_boolean_string( value ) when is_binary( value ) do
+
+	def is_boolean_include_string( value ) when is_binary( value ) do
 		String.downcase( value ) == "true" || String.downcase( value ) == "false"
 	end
-	def is_float_string_safe( value ) when is_binary( value ) do
+	def is_boolean_include_string( value ), do: is_boolean( value )
+
+	def is_float_include_string( value ) when is_binary( value ) do
 		try do
 			if String.to_float( value ), do: true, else: false
 		catch
 			_, _ -> false
 		end
 	end
-	def is_integer_string_safe( value ) when is_binary( value ) do
+	def is_float_include_string( value ), do: is_float( value )
+
+	def is_integer_include_string( value ) when is_binary( value ) do
 		try do
 			if String.to_integer( value ), do: true, else: false
 		catch
 			_, _ -> false
 		end
 	end
+	def is_integer_include_string( value ), do: is_integer( value )
 
 	@doc """
 	aa
@@ -145,4 +151,88 @@ defmodule Type do
 			_         -> nil
 		end
 	end
+
+	@doc """
+	To string
+
+	## Examples
+		iex> Type.to_string( nil )
+		nil
+		iex> Type.to_string( 123 )
+		"123"
+		iex> Type.to_string( 12.34 )
+		"12.34"
+		iex> Type.to_string( "123" )
+		"123"
+		iex> Type.to_string( "12.34" )
+		"12.34"
+	"""
+	def to_string( nil ),  do: nil
+	def to_string( value ) when is_binary( value ), do: value
+	def to_string( value ) when is_number( value ) do
+		case is( value ) do
+			"Float"   -> value |> Float.to_string
+			"Integer" -> value |> Integer.to_string
+			_         -> nil
+		end
+	end
+
+	@doc """
+	Possible types(not collentions)
+
+	## Examples
+		iex> Type.possible_types( "" )
+		[ "String" ]
+		iex> Type.possible_types( "1" )
+		[ "Integer", "String" ]
+		iex> Type.possible_types( 1 )
+		[ "Integer" ]
+		iex> Type.possible_types( "1.2" )
+		[ "Float", "String" ]
+		iex> Type.possible_types( 1.2 )
+		[ "Float" ]
+		iex> Type.possible_types( true )
+		[ "Boolean" ]
+		iex> Type.possible_types( "true" )
+		[ "Boolean", "String" ]
+		iex> Type.possible_types( "True" )
+		[ "Boolean", "String" ]
+		iex> Type.possible_types( false )
+		[ "Boolean" ]
+		iex> Type.possible_types( "false" )
+		[ "Boolean", "String" ]
+		iex> Type.possible_types( "False" )
+		[ "Boolean", "String" ]
+	"""
+	def possible_types( value ) do
+		[ 
+			%{ "label" => "Integer", "checker" => &is_integer_include_string/1 }, 
+			%{ "label" => "Float",   "checker" => &is_float_include_string/1 }, 
+			%{ "label" => "String",  "checker" => &is_binary/1 }, 
+			%{ "label" => "Boolean", "checker" => &is_boolean_include_string/1 }, 
+		]
+		|> Enum.map( &( if &1[ "checker" ].( value ) == true, do: &1[ "label" ], else: nil ) )
+		|> Enum.filter( & &1 != nil )
+		|> Enum.sort
+	end
+
+	@doc """
+	Is missing
+
+	## Examples
+		iex> Type.is_missing( "" )
+		true
+		iex> Type.is_missing( nil )
+		true
+		iex> Type.is_missing( "a" )
+		false
+		iex> Type.is_missing( 1 )
+		false
+		iex> Type.is_missing( 1.2 )
+		false
+		iex> Type.is_missing( true )
+		false
+	"""
+	def is_missing( value ), do: value == nil || value == ""
+
 end

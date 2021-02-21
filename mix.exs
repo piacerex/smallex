@@ -4,14 +4,14 @@ defmodule Smallex.Mixfile do
   def project do
     [
       app: :smallex,
-      version: "0.2.3",
+      version: "0.2.4",
       elixir: "~> 1.6",
 		description: "Elixir small utilities", 
 		package: 
 		[
 			maintainers: [ "piacere-ex" ], 
 			licenses:    [ "Apache 2.0" ], 
-			links:       %{ "GitHub" => "https://github.com/data-maestro/smallex" }, 
+			links:       %{ "GitHub" => "https://github.com/piacere-ex/smallex" }, 
 		],
       start_permanent: Mix.env == :prod,
       deps: deps()
@@ -25,7 +25,7 @@ defmodule Smallex.Mixfile do
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
+	# Run "mix help deps" to learn about dependencies.
 	defp deps do
 		[
 			{ :ex_doc,              "~> 0.19",   only: :dev, runtime: false }, 
@@ -37,7 +37,7 @@ defmodule Smallex.Mixfile do
 			{ :timex,               "~> 3.3" }, 
 			{ :decimal,             "~> 1.0" }, 
 
-			{ :httpoison,           "~> 1.1" }, 
+			{ :httpoison,           "~> 1.8" }, 
 			{ :poison,              "~> 3.1" }, 
 
 			{ :csv,                 "~> 2.1" }, 

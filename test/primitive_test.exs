@@ -17,6 +17,19 @@ defmodule PrimitiveValueTest do
 	test "0 not is_boolean",  do: assert is_boolean( 0 ) == false
 end
 
+defmodule PrimitiveSyntaxSugarTest do
+	use PowerAssert
+
+	test "keyword list same tuple list", do: assert ( [ c1: 6, c2: 7 ] == [ { :c1, 6 }, { :c2, 7 } ] ) == true
+
+# Following tests succeeds but warning is issued
+#	test "keyword list(key string atom) same tuple list", do: assert ( [ "c1": 6, "c2": 7 ] == [ { :c1, 6 }, { :c2, 7 } ] ) == true
+#	test "keyword list same tuple list(key string atom)", do: assert ( [ c1: 6, c2: 7 ] == [ { :"c1", 6 }, { :"c2", 7 } ] ) == true
+
+	test "keyword list not same tuple list(key string)", do: assert ( [ c1: 6, c2: 7 ] == [ { "c1", 6 }, { "c2", 7 } ] ) == false
+
+end
+
 defmodule PrimitiveDateTimeTest do
 	use PowerAssert
 
