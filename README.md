@@ -148,7 +148,7 @@ Add to your ```mix.exs``` file:
 ```elixir
 def deps do
   [
-    { :smallex, "~> 0.2.3" }
+    { :smallex, "~> 1.0.0" }
   ]
 end
 ```
