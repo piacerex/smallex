@@ -1,4 +1,4 @@
 defmodule DtDocTest do
-	use PowerAssert
-	doctest Dt
+  use PowerAssert
+  doctest Dt
 end
