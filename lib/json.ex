@@ -103,7 +103,7 @@ defmodule Json do
 		iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1",  [ data1: "value1" ], "Content-Type": "application/json" ).status_code
 		200
 	"""
-	def put_raw_response( domain, path, body ), do: post_raw_response( domain, path, body, [])
+	def put_raw_response( domain, path, body ), do: put_raw_response( domain, path, body, [])
 	def put_raw_response( domain, path, body, header ) when is_list( body ) do
 		put_raw_response( domain, path, body |> Enum.into(%{}), header )
 	end
@@ -115,7 +115,7 @@ defmodule Json do
 		domain <> path
 		|> HTTPoison.put!( body, header )
 	end
-	def put( domain, path, body ), do: post( domain, path, body, [] )
+	def put( domain, path, body ), do: put( domain, path, body, [] )
 	def put( domain, path, body, header ) when is_list(body) do
 		put( domain, path, body |> Enum.into(%{}), header )
 	end
@@ -140,7 +140,28 @@ defmodule Json do
 		
 		iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "args" ]
 		%{"param1" => "value1"}
+
+		iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" ).status_code
+		200
+		
+		iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
+		200
+		
+		iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1",  [ data1: "value1" ], "Content-Type": "application/json" ).status_code
+		200
 	"""
+	def patch_raw_response( domain, path, body ), do: patch_raw_response( domain, path, body, [])
+	def patch_raw_response( domain, path, body, header ) when is_list( body ) do
+		patch_raw_response( domain, path, body |> Enum.into(%{}), header )
+	end
+	def patch_raw_response( domain, path, body, header) when is_map( body ) do
+		{ :ok, body } = body |> Jason.encode
+		patch_raw_response( domain, path, body |> String.replace("\"", ""), header )
+	end
+	def patch_raw_response( domain, path, body, header ) do
+		domain <> path
+		|> HTTPoison.patch!( body, header )
+	end
 	def patch( domain, path, body ), do: patch( domain, path, body, [] )
 	def patch( domain, path, body, header ) when is_list( body ) do
 		patch( domain, path, body |> Enum.into(%{}), header )
