@@ -84,15 +84,32 @@ defmodule Json do
 	## Examples
 		iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
 		%{"param1" => "value1"}
+		
+		iex> Json.put( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "data" ]
+		"{data1:value1}"
+
+		iex> Json.put( "https://httpbin.org", "/put?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "data" ]
+		"{data1:value1}"
+
+		iex> Json.put( "https://httpbin.org", "/put?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "data" ]
+		"{data1:value1}"
 				
-		iex> Json.put_raw_response("https://httpbin.org", "/put?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" ).status_code
+		iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" ).status_code
 		200
 	"""
 	def put_raw_response( domain, path, body, header \\ [] ) do
 		domain <> path
 		|> HTTPoison.put!( body, header )
 	end
-	def put( domain, path, body, header \\ [] ) do
+	def put( domain, path, body ), do: post( domain, path, body, [] )
+	def put( domain, path, body, header ) when is_list(body) do
+		put( domain, path, body |> Enum.into(%{}), header )
+	end
+	def put( domain, path, body, header ) when is_map(body) do
+		{ :ok, body } = body |> Jason.encode
+		put( domain, path, body |> String.replace("\"", ""), header )
+	end
+	def put( domain, path, body, header ) do
 		put_raw_response( domain, path, body, header )
 		|> parse
 	end
