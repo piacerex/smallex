@@ -134,8 +134,22 @@ defmodule Json do
 	## Examples
 		iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
 		%{"param1" => "value1"}
+
+		iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "args" ]
+		%{"param1" => "value1"}
+		
+		iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "args" ]
+		%{"param1" => "value1"}
 	"""
-	def patch( domain, path, body, header \\ [] ) do
+	def patch( domain, path, body ), do: patch( domain, path, body, [] )
+	def patch( domain, path, body, header ) when is_list( body ) do
+		patch( domain, path, body |> Enum.into(%{}), header )
+	end
+	def patch( domain, path, body, header ) when is_map( body ) do
+		{ :ok, body, } = body |> Jason.encode
+		patch( domain, path, body |> String.replace("\"", ""), header)
+	end
+	def patch( domain, path, body, header ) do
 		domain <> path
 		|> HTTPoison.patch!( body, header )
 		|> parse
