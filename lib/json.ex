@@ -96,8 +96,22 @@ defmodule Json do
 				
 		iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" ).status_code
 		200
+		
+		iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
+		200
+		
+		iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1",  [ data1: "value1" ], "Content-Type": "application/json" ).status_code
+		200
 	"""
-	def put_raw_response( domain, path, body, header \\ [] ) do
+	def put_raw_response( domain, path, body ), do: post_raw_response( domain, path, body, [])
+	def put_raw_response( domain, path, body, header ) when is_list( body ) do
+		put_raw_response( domain, path, body |> Enum.into(%{}), header )
+	end
+	def put_raw_response( domain, path, body, header) when is_map( body ) do
+		{ :ok, body } = body |> Jason.encode
+		put_raw_response( domain, path, body |> String.replace("\"", ""), header )
+	end
+	def put_raw_response( domain, path, body, header ) do
 		domain <> path
 		|> HTTPoison.put!( body, header )
 	end
