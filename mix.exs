@@ -39,7 +39,8 @@ defmodule Smallex.Mixfile do
 
       { :httpoison,      "~> 1.8"   }, 
       { :poison,         "~> 3.1"   }, 
-
+      { :jason,          "~> 1.2"   },
+      
       { :csv,            "~> 2.1"   }, 
       { :excelion,       "~> 0.0.5" }, 
       { :statistics,     "~> 0.5.1" }, 
