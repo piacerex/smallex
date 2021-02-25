@@ -1,4 +1,4 @@
 defmodule TypeDocTest do
-	use PowerAssert
-	doctest Type
+  use PowerAssert
+  doctest Type
 end

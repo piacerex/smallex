@@ -1,4 +1,4 @@
 defmodule JsonDocTest do
-	use PowerAssert
-	doctest Json
+  use PowerAssert
+  doctest Json
 end

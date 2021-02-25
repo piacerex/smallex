@@ -1,4 +1,4 @@
 defmodule TplDocTest do
-	use PowerAssert
-	doctest Tpl
+  use PowerAssert
+  doctest Tpl
 end
