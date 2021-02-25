@@ -7,8 +7,8 @@ defmodule Json do
   Get JSON API (header & map_function are optional)
 
   ## Examples
-  	iex> Json.get( "https://api.github.com", "/rate_limit" )[ "rate" ][ "limit" ]
-  	60
+    iex> Json.get( "https://api.github.com", "/rate_limit" )[ "rate" ][ "limit" ]
+    60
   """
   def get(domain, path, header \\ []) do
     (domain <> path)
@@ -20,11 +20,11 @@ defmodule Json do
   Post JSON API (header & map_function are optional)
 
   ## Examples
-  	iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
-  	%{"param1" => "value1"}
+    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
+    %{"param1" => "value1"}
 
-  	iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "data" ]
-  	"{ data1:value1 }"
+    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "data" ]
+    "{ data1:value1 }"
   """
   def post(domain, path, body, header \\ []) do
     (domain <> path)
@@ -36,8 +36,8 @@ defmodule Json do
   Put JSON API (header & map_function are optional)
 
   ## Examples
-  	iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
-  	%{"param1" => "value1"}
+    iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
+    %{"param1" => "value1"}
   """
   def put(domain, path, body, header \\ []) do
     (domain <> path)
@@ -49,8 +49,8 @@ defmodule Json do
   Patch JSON API (header & map_function are optional)
 
   ## Examples
-  	iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
-  	%{"param1" => "value1"}
+    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
+    %{"param1" => "value1"}
   """
   def patch(domain, path, body, header \\ []) do
     (domain <> path)
@@ -62,8 +62,8 @@ defmodule Json do
   Delete JSON API (header & map_function are optional)
 
   ## Examples
-  	iex> ( Json.delete( "https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ) |> Jason.decode! )[ "args" ]
-  	%{"param1" => "value1"}
+    iex> ( Json.delete( "https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ) |> Jason.decode! )[ "args" ]
+    %{"param1" => "value1"}
   """
   def delete(domain, path, header \\ []) do
     (domain <> path)
@@ -75,8 +75,8 @@ defmodule Json do
   Head JSON API (header & map_function are optional)
 
   ## Examples
-  	iex> Json.head( "https://httpbin.org", "/", [] )
-  	""
+    iex> Json.head( "https://httpbin.org", "/", [] )
+    ""
   """
   def head(domain, path, header \\ []) do
     (domain <> path)
