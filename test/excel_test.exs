@@ -1,4 +1,4 @@
 defmodule ExcelDocTest do
-	use PowerAssert
-	doctest Excel
+  use PowerAssert
+  doctest Excel
 end

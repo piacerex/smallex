@@ -1,4 +1,4 @@
 defmodule NumberDocTest do
-	use PowerAssert
-	doctest Number
+  use PowerAssert
+  doctest Number
 end
