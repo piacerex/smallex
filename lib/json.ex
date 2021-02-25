@@ -180,7 +180,7 @@ defmodule Json do
 	Delete JSON API (header & map_function are optional)
 
 	## Examples
-		iex> ( Json.delete( "https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ) |> Poison.decode! )[ "args" ]
+		iex> ( Json.delete( "https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ) |> Jason.decode! )[ "args" ]
 		%{"param1" => "value1"}
 	
 		iex> Json.delete_raw_response("https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ).status_code
@@ -211,7 +211,7 @@ defmodule Json do
 	defp parse( response ) do
 		response
 		|> get_body
-		|> Poison.decode!
+		|> Jason.decode!
 	end
 	defp get_body( %{ status_code: 200, body: body } ), do: body
 	defp get_body( %{ status_code: 201, body: body } ), do: body
