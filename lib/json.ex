@@ -23,29 +23,26 @@ defmodule Json do
     |> parse
   end
 
-  @doc """
+  @doc ~S"""
   Post JSON API (header & map_function are optional)
 
   ## Examples
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
+    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "args" ]
     %{"param1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "data" ]
-    "{ data1:value1 }"
+    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{\"data1\":\"value1\"}", "Content-Type": "application/json" )[ "json" ]
+    %{"data1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "data" ]
-    "{data1:value1}"
+    iex> Json.post( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+    %{"data1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "data" ]
-    "{data1:value1}"
+    iex> Json.post( "https://httpbin.org", "/post?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "json" ]
+    %{"data1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }" )[ "args" ]
+    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }" )[ "args" ]
     %{"param1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "data" ]
-    "{data1:value1}"
-
-    iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" ).status_code
+    iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" ).status_code
     200
 
     iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
@@ -62,7 +59,7 @@ defmodule Json do
 
   def post_raw_response(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
-    post_raw_response(domain, path, body |> String.replace("\"", ""), header)
+    post_raw_response(domain, path, body, header)
   end
 
   def post_raw_response(domain, path, body, header) do
@@ -78,7 +75,7 @@ defmodule Json do
 
   def post(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
-    post(domain, path, body |> String.replace("\"", ""), header)
+    post(domain, path, body, header)
   end
 
   def post(domain, path, body, header) do
@@ -86,23 +83,23 @@ defmodule Json do
     |> parse
   end
 
-  @doc """
+  @doc ~S"""
   Put JSON API (header & map_function are optional)
 
   ## Examples
-    iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
+    iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "args" ]
     %{"param1" => "value1"}
 
-    iex> Json.put( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "data" ]
-    "{data1:value1}"
+    iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" )[ "json" ]
+    %{"data1"=> "value1"}
 
-    iex> Json.put( "https://httpbin.org", "/put?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "data" ]
-    "{data1:value1}"
+    iex> Json.put( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+    %{"data1"=> "value1"}
 
-    iex> Json.put( "https://httpbin.org", "/put?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "data" ]
-    "{data1:value1}"
+    iex> Json.put( "https://httpbin.org", "/put?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "json" ]
+    %{"data1"=> "value1"}
 
-    iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" ).status_code
+    iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" ).status_code
     200
 
     iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
@@ -119,7 +116,7 @@ defmodule Json do
 
   def put_raw_response(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
-    put_raw_response(domain, path, body |> String.replace("\"", ""), header)
+    put_raw_response(domain, path, body, header)
   end
 
   def put_raw_response(domain, path, body, header) do
@@ -135,7 +132,7 @@ defmodule Json do
 
   def put(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
-    put(domain, path, body |> String.replace("\"", ""), header)
+    put(domain, path, body, header)
   end
 
   def put(domain, path, body, header) do
@@ -143,20 +140,23 @@ defmodule Json do
     |> parse
   end
 
-  @doc """
+  @doc ~S"""
   Patch JSON API (header & map_function are optional)
 
   ## Examples
-    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" )[ "args" ]
+    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "args" ]
     %{"param1" => "value1"}
 
-    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "args" ]
-    %{"param1" => "value1"}
+    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "json" ]
+    %{"data1" => "value1"}
 
-    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "args" ]
-    %{"param1" => "value1"}
+    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+    %{"data1" => "value1"}
 
-    iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", "{ data1:value1 }", "Content-Type": "application/json" ).status_code
+    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "json" ]
+    %{"data1" => "value1"}
+
+    iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" ).status_code
     200
 
     iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
@@ -173,7 +173,7 @@ defmodule Json do
 
   def patch_raw_response(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
-    patch_raw_response(domain, path, body |> String.replace("\"", ""), header)
+    patch_raw_response(domain, path, body, header)
   end
 
   def patch_raw_response(domain, path, body, header) do
@@ -189,7 +189,7 @@ defmodule Json do
 
   def patch(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
-    patch(domain, path, body |> String.replace("\"", ""), header)
+    patch(domain, path, body, header)
   end
 
   def patch(domain, path, body, header) do
