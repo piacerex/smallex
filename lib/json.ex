@@ -79,7 +79,8 @@ defmodule Json do
     iex> Json.post_raw_response( "https://httpbin.org/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
     200
   """
-  def post_raw_response(url, body), do: post_raw_response(url, body, "Content-Type": "application/json")
+  def post_raw_response(url, body),
+    do: post_raw_response(url, body, "Content-Type": "application/json")
 
   def post_raw_response(url, body, header) when is_map(body) and is_list(header) do
     {:ok, body} = body |> Jason.encode()
@@ -115,7 +116,7 @@ defmodule Json do
 
   def post(domain, path, body, header) do
     (domain <> path)
-    |>post(body, header)
+    |> post(body, header)
   end
 
   @doc ~S"""
@@ -131,35 +132,61 @@ defmodule Json do
     iex> Json.put( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
     %{"data1"=> "value1"}
 
+    iex> Json.put( "https://httpbin.org/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" )[ "json" ]
+    %{"data1"=> "value1"}
+
+    iex> Json.put( "https://httpbin.org/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+    %{"data1"=> "value1"}
+
     iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" ).status_code
     200
 
     iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
     200
-  """
-  def put_raw_response(domain, path, body),
-    do: put_raw_response(domain, path, body, "Content-Type": "application/json")
 
-  def put_raw_response(domain, path, body, header) when is_map(body) do
+    iex> Json.put_raw_response( "https://httpbin.org/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" ).status_code
+    200
+
+    iex> Json.put_raw_response( "https://httpbin.org/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
+    200
+  """
+  def put_raw_response(url, body), do: post_raw_response(url, body, "Content-Type": "application/json")
+
+  def put_raw_response(url, body, header) when is_map(body) and is_list(header) do
     {:ok, body} = body |> Jason.encode()
-    put_raw_response(domain, path, body, header)
+    put_raw_response(url, body, header)
+  end
+
+  def put_raw_response(url, body, header) when is_list(header) do
+    HTTPoison.put!(url, body, header)
+  end
+
+  def put_raw_response(domain, path, body) when is_map(body) do
+    {:ok, body} = body |> Jason.encode()
+    (domain <> path)
+    |> put_raw_response(body, "Content-Type": "application/json")
   end
 
   def put_raw_response(domain, path, body, header) do
     (domain <> path)
-    |> HTTPoison.put!(body, header)
+    |> put_raw_response(body, header)
   end
 
-  def put(domain, path, body), do: put(domain, path, body, "Content-Type": "application/json")
+  def put(url, body), do: put(url, body, "Content-Type": "application/json")
 
-  def put(domain, path, body, header) when is_map(body) do
-    {:ok, body} = body |> Jason.encode()
-    put(domain, path, body, header)
+  def put(url, body, header) when is_list(header) do
+    put_raw_response(url, body, header)
+    |> parse
+  end
+
+  def put(domain, path, body) do
+    (domain <> path)
+    |> put(body, "Content-Type": "application/json")
   end
 
   def put(domain, path, body, header) do
-    put_raw_response(domain, path, body, header)
-    |> parse
+    (domain <> path)
+    |> put(body, header)
   end
 
   @doc ~S"""
