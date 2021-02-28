@@ -19,25 +19,26 @@ defmodule Json do
     iex> Json.get_raw_response( "https://api.github.com/rate_limit" ).status_code
     200
   """
-  def get_raw_response(url), do: get_raw_response(url, ["Content-Type": "application/json"])
+  def get_raw_response(url), do: get_raw_response(url, "Content-Type": "application/json")
 
   def get_raw_response(url, header) when is_list(header), do: HTTPoison.get!(url, header)
 
-  def get_raw_response(domain, path), do: get_raw_response(domain, path, ["Content-Type": "application/json"])
+  def get_raw_response(domain, path),
+    do: get_raw_response(domain, path, "Content-Type": "application/json")
 
   def get_raw_response(domain, path, header) do
     (domain <> path)
     |> get_raw_response(header)
   end
 
-  def get(url), do: get(url, ["Content-Type": "application/json"])
+  def get(url), do: get(url, "Content-Type": "application/json")
 
   def get(url, header) when is_list(header) do
     get_raw_response(url, header)
     |> parse
   end
 
-  def get(domain, path), do: get(domain, path, ["Content-Type": "application/json"])
+  def get(domain, path), do: get(domain, path, "Content-Type": "application/json")
 
   def get(domain, path, header) do
     (domain <> path)
@@ -57,6 +58,12 @@ defmodule Json do
     iex> Json.post( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
     %{"data1" => "value1"}
 
+    iex> Json.post( "https://httpbin.org/post?param1=value1", "{\"data1\":\"value1\"}", "Content-Type": "application/json" )[ "json" ]
+    %{"data1" => "value1"}
+
+    iex> Json.post( "https://httpbin.org/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+    %{"data1" => "value1"}
+
     iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }" )[ "args" ]
     %{"param1" => "value1"}
 
@@ -65,30 +72,50 @@ defmodule Json do
 
     iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
     200
+    
+    iex> Json.post_raw_response( "https://httpbin.org/post?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" ).status_code
+    200
+    
+    iex> Json.post_raw_response( "https://httpbin.org/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
+    200
   """
-  def post_raw_response(domain, path, body),
-    do: post_raw_response(domain, path, body, "Content-Type": "application/json")
+  def post_raw_response(url, body), do: post_raw_response(url, body, "Content-Type": "application/json")
 
-  def post_raw_response(domain, path, body, header) when is_map(body) do
+  def post_raw_response(url, body, header) when is_map(body) and is_list(header) do
     {:ok, body} = body |> Jason.encode()
-    post_raw_response(domain, path, body, header)
+    post_raw_response(url, body, header)
+  end
+
+  def post_raw_response(url, body, header) when is_list(header) do
+    HTTPoison.post!(url, body, header)
+  end
+
+  def post_raw_response(domain, path, body) when is_map(body) do
+    {:ok, body} = body |> Jason.encode()
+    (domain <> path)
+    |> post_raw_response(body, "Content-Type": "application/json")
   end
 
   def post_raw_response(domain, path, body, header) do
     (domain <> path)
-    |> HTTPoison.post!(body, header)
+    |> post_raw_response(body, header)
   end
 
-  def post(domain, path, body), do: post(domain, path, body, "Content-Type": "application/json")
+  def post(url, body), do: post(url, body, "Content-Type": "application/json")
 
-  def post(domain, path, body, header) when is_map(body) do
-    {:ok, body} = body |> Jason.encode()
-    post(domain, path, body, header)
+  def post(url, body, header) when is_list(header) do
+    post_raw_response(url, body, header)
+    |> parse
+  end
+
+  def post(domain, path, body) do
+    (domain <> path)
+    |> post(body, "Content-Type": "application/json")
   end
 
   def post(domain, path, body, header) do
-    post_raw_response(domain, path, body, header)
-    |> parse
+    (domain <> path)
+    |>post(body, header)
   end
 
   @doc ~S"""
