@@ -211,7 +211,8 @@ defmodule Json do
     iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
     200
   """
-  def patch_raw_response(url, body), do: patch_raw_response(url, body, "Content-Type": "application/json")
+  def patch_raw_response(url, body),
+    do: patch_raw_response(url, body, "Content-Type": "application/json")
 
   def patch_raw_response(url, body, header) when is_map(body) and is_list(header) do
     {:ok, body} = body |> Jason.encode()
@@ -224,6 +225,7 @@ defmodule Json do
 
   def patch_raw_response(domain, path, body) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
+
     (domain <> path)
     |> patch_raw_response(body, "Content-Type": "application/json")
   end
@@ -256,16 +258,39 @@ defmodule Json do
   ## Examples
     iex> ( Json.delete( "https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ) )[ "args" ]
     %{"param1" => "value1"}
+    
+    iex> ( Json.delete( "https://httpbin.org/delete?param1=value1", "Content-Type": "application/json" ) )[ "args" ]
+    %{"param1" => "value1"}
 
     iex> Json.delete_raw_response("https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ).status_code
     200
+
+    iex> Json.delete_raw_response("https://httpbin.org/delete?param1=value1", "Content-Type": "application/json" ).status_code
+    200
   """
-  def delete_raw_response(domain, path, header \\ ["Content-Type": "application/json"]) do
-    (domain <> path)
-    |> HTTPoison.delete!(header)
+  def delete_raw_response(url), do: delete_raw_response(url, ["Content-Type": "application/json"])
+  
+  def delete_raw_response(url, header) when is_list(header) do
+    HTTPoison.delete!(url, header)
   end
 
-  def delete(domain, path, header \\ ["Content-Type": "application/json"]) do
+  def delete_raw_response(domain, path), do: delete_raw_response(domain, path, ["Content-Type": "application/json"])
+
+  def delete_raw_response(domain, path, header) do
+    (domain <> path)
+    |> delete_raw_response(header)
+  end
+
+  def delete(url), do: delete(url, ["Content-Type": "application/json"])
+
+  def delete(url, header) when is_list(header) do
+    delete_raw_response(url, header)
+    |> parse
+  end
+  
+  def delete(domain, path), do: delete(domain, path, ["Content-Type": "application/json"])
+
+  def delete(domain, path, header) do
     delete_raw_response(domain, path, header)
     |> parse
   end
