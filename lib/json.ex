@@ -150,7 +150,7 @@ defmodule Json do
     iex> Json.put_raw_response( "https://httpbin.org/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
     200
   """
-  def put_raw_response(url, body), do: post_raw_response(url, body, "Content-Type": "application/json")
+  def put_raw_response(url, body), do: put_raw_response(url, body, "Content-Type": "application/json")
 
   def put_raw_response(url, body, header) when is_map(body) and is_list(header) do
     {:ok, body} = body |> Jason.encode()
