@@ -93,6 +93,7 @@ defmodule Json do
 
   def post_raw_response(domain, path, body) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
+
     (domain <> path)
     |> post_raw_response(body, "Content-Type": "application/json")
   end
@@ -150,7 +151,8 @@ defmodule Json do
     iex> Json.put_raw_response( "https://httpbin.org/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
     200
   """
-  def put_raw_response(url, body), do: put_raw_response(url, body, "Content-Type": "application/json")
+  def put_raw_response(url, body),
+    do: put_raw_response(url, body, "Content-Type": "application/json")
 
   def put_raw_response(url, body, header) when is_map(body) and is_list(header) do
     {:ok, body} = body |> Jason.encode()
@@ -163,6 +165,7 @@ defmodule Json do
 
   def put_raw_response(domain, path, body) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
+
     (domain <> path)
     |> put_raw_response(body, "Content-Type": "application/json")
   end
@@ -208,29 +211,43 @@ defmodule Json do
     iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
     200
   """
-  def patch_raw_response(domain, path, body),
-    do: patch_raw_response(domain, path, body, "Content-Type": "application/json")
+  def patch_raw_response(url, body), do: patch_raw_response(url, body, "Content-Type": "application/json")
 
-  def patch_raw_response(domain, path, body, header) when is_map(body) do
+  def patch_raw_response(url, body, header) when is_map(body) and is_list(header) do
     {:ok, body} = body |> Jason.encode()
-    patch_raw_response(domain, path, body, header)
+    patch_raw_response(url, body, header)
+  end
+
+  def patch_raw_response(url, body, header) when is_list(header) do
+    HTTPoison.patch!(url, body, header)
+  end
+
+  def patch_raw_response(domain, path, body) when is_map(body) do
+    {:ok, body} = body |> Jason.encode()
+    (domain <> path)
+    |> patch_raw_response(body, "Content-Type": "application/json")
   end
 
   def patch_raw_response(domain, path, body, header) do
     (domain <> path)
-    |> HTTPoison.patch!(body, header)
+    |> patch_raw_response(body, header)
   end
 
-  def patch(domain, path, body), do: patch(domain, path, body, "Content-Type": "application/json")
+  def patch(url, body), do: patch(url, body, "Content-Type": "application/json")
 
-  def patch(domain, path, body, header) when is_map(body) do
-    {:ok, body} = body |> Jason.encode()
-    patch(domain, path, body, header)
+  def patch(url, body, header) when is_list(header) do
+    patch_raw_response(url, body, header)
+    |> parse
+  end
+
+  def patch(domain, path, body) do
+    (domain <> path)
+    |> patch(body, "Content-Type": "application/json")
   end
 
   def patch(domain, path, body, header) do
-    patch_raw_response(domain, path, body, header)
-    |> parse
+    (domain <> path)
+    |> patch(body, header)
   end
 
   @doc """
