@@ -13,12 +13,12 @@ defmodule Json do
     iex> Json.get_raw_response( "https://api.github.com", "/rate_limit" ).status_code
     200
   """
-  def get_raw_response(domain, path, header \\ []) do
+  def get_raw_response(domain, path, header \\ ["Content-Type": "application/json"]) do
     (domain <> path)
     |> HTTPoison.get!(header)
   end
 
-  def get(domain, path, header \\ []) do
+  def get(domain, path, header \\ ["Content-Type": "application/json"]) do
     get_raw_response(domain, path, header)
     |> parse
   end
@@ -51,7 +51,7 @@ defmodule Json do
     iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" ).status_code
     200
   """
-  def post_raw_response(domain, path, body), do: post_raw_response(domain, path, body, [])
+  def post_raw_response(domain, path, body), do: post_raw_response(domain, path, body, ["Content-Type": "application/json"])
 
   def post_raw_response(domain, path, body, header) when is_list(body) do
     post_raw_response(domain, path, body |> Enum.into(%{}), header)
@@ -67,7 +67,7 @@ defmodule Json do
     |> HTTPoison.post!(body, header)
   end
 
-  def post(domain, path, body), do: post(domain, path, body, [])
+  def post(domain, path, body), do: post(domain, path, body, ["Content-Type": "application/json"])
 
   def post(domain, path, body, header) when is_list(body) do
     post(domain, path, body |> Enum.into(%{}), header)
@@ -108,7 +108,7 @@ defmodule Json do
     iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1",  [ data1: "value1" ], "Content-Type": "application/json" ).status_code
     200
   """
-  def put_raw_response(domain, path, body), do: put_raw_response(domain, path, body, [])
+  def put_raw_response(domain, path, body), do: put_raw_response(domain, path, body, ["Content-Type": "application/json"])
 
   def put_raw_response(domain, path, body, header) when is_list(body) do
     put_raw_response(domain, path, body |> Enum.into(%{}), header)
@@ -124,7 +124,7 @@ defmodule Json do
     |> HTTPoison.put!(body, header)
   end
 
-  def put(domain, path, body), do: put(domain, path, body, [])
+  def put(domain, path, body), do: put(domain, path, body, ["Content-Type": "application/json"])
 
   def put(domain, path, body, header) when is_list(body) do
     put(domain, path, body |> Enum.into(%{}), header)
@@ -165,7 +165,7 @@ defmodule Json do
     iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1",  [ data1: "value1" ], "Content-Type": "application/json" ).status_code
     200
   """
-  def patch_raw_response(domain, path, body), do: patch_raw_response(domain, path, body, [])
+  def patch_raw_response(domain, path, body), do: patch_raw_response(domain, path, body, ["Content-Type": "application/json"])
 
   def patch_raw_response(domain, path, body, header) when is_list(body) do
     patch_raw_response(domain, path, body |> Enum.into(%{}), header)
@@ -181,7 +181,7 @@ defmodule Json do
     |> HTTPoison.patch!(body, header)
   end
 
-  def patch(domain, path, body), do: patch(domain, path, body, [])
+  def patch(domain, path, body), do: patch(domain, path, body, ["Content-Type": "application/json"])
 
   def patch(domain, path, body, header) when is_list(body) do
     patch(domain, path, body |> Enum.into(%{}), header)
@@ -193,8 +193,7 @@ defmodule Json do
   end
 
   def patch(domain, path, body, header) do
-    (domain <> path)
-    |> HTTPoison.patch!(body, header)
+    patch_raw_response(domain, path, body, header)
     |> parse
   end
 
@@ -202,30 +201,30 @@ defmodule Json do
   Delete JSON API (header & map_function are optional)
 
   ## Examples
-    iex> ( Json.delete( "https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ) |> Jason.decode! )[ "args" ]
+    iex> ( Json.delete( "https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ) )[ "args" ]
     %{"param1" => "value1"}
 
     iex> Json.delete_raw_response("https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ).status_code
     200
   """
-  def delete_raw_response(domain, path, header \\ []) do
+  def delete_raw_response(domain, path, header \\ ["Content-Type": "application/json"]) do
     (domain <> path)
     |> HTTPoison.delete!(header)
   end
 
-  def delete(domain, path, header \\ []) do
+  def delete(domain, path, header \\ ["Content-Type": "application/json"]) do
     delete_raw_response(domain, path, header)
-    |> get_body
+    |> parse
   end
 
   @doc """
   Head JSON API (header & map_function are optional)
 
   ## Examples
-    iex> Json.head( "https://httpbin.org", "/", [] )
+    iex> Json.head( "https://httpbin.org", "/", ["Content-Type": "application/json"] )
     ""
   """
-  def head(domain, path, header \\ []) do
+  def head(domain, path, header \\ ["Content-Type": "application/json"]) do
     (domain <> path)
     |> HTTPoison.head!(header)
     |> get_body
