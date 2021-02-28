@@ -268,27 +268,28 @@ defmodule Json do
     iex> Json.delete_raw_response("https://httpbin.org/delete?param1=value1", "Content-Type": "application/json" ).status_code
     200
   """
-  def delete_raw_response(url), do: delete_raw_response(url, ["Content-Type": "application/json"])
-  
+  def delete_raw_response(url), do: delete_raw_response(url, "Content-Type": "application/json")
+
   def delete_raw_response(url, header) when is_list(header) do
     HTTPoison.delete!(url, header)
   end
 
-  def delete_raw_response(domain, path), do: delete_raw_response(domain, path, ["Content-Type": "application/json"])
+  def delete_raw_response(domain, path),
+    do: delete_raw_response(domain, path, "Content-Type": "application/json")
 
   def delete_raw_response(domain, path, header) do
     (domain <> path)
     |> delete_raw_response(header)
   end
 
-  def delete(url), do: delete(url, ["Content-Type": "application/json"])
+  def delete(url), do: delete(url, "Content-Type": "application/json")
 
   def delete(url, header) when is_list(header) do
     delete_raw_response(url, header)
     |> parse
   end
-  
-  def delete(domain, path), do: delete(domain, path, ["Content-Type": "application/json"])
+
+  def delete(domain, path), do: delete(domain, path, "Content-Type": "application/json")
 
   def delete(domain, path, header) do
     delete_raw_response(domain, path, header)
@@ -301,11 +302,25 @@ defmodule Json do
   ## Examples
     iex> Json.head( "https://httpbin.org", "/", ["Content-Type": "application/json"] )
     ""
+
+    iex> Json.head( "https://httpbin.org/", ["Content-Type": "application/json"] )
+    ""
   """
-  def head(domain, path, header \\ ["Content-Type": "application/json"]) do
-    (domain <> path)
-    |> HTTPoison.head!(header)
+  def head(url), do: head(url, ["Content-Type": "application/json"])
+
+  def head(url, head) when is_list(head) do
+    HTTPoison.head!(url, head)
     |> get_body
+  end
+
+  def head(domain, path) do
+    (domain <> path)
+    |> head()
+  end
+
+  def head(domain, path, head) do
+    (domain <> path)
+    |> head(head)
   end
 
   defp parse(response) do
