@@ -15,6 +15,9 @@ defmodule Json do
 
     iex> Json.get_raw_response( "https://api.github.com", "/rate_limit" ).status_code
     200
+    
+    iex> Json.get_raw_response( "https://api.github.com/rate_limit" ).status_code
+    200
   """
   def get_raw_response(url), do: get_raw_response(url, ["Content-Type": "application/json"])
 
@@ -54,9 +57,6 @@ defmodule Json do
     iex> Json.post( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
     %{"data1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "json" ]
-    %{"data1" => "value1"}
-
     iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }" )[ "args" ]
     %{"param1" => "value1"}
 
@@ -65,16 +65,9 @@ defmodule Json do
 
     iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
     200
-
-    iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" ).status_code
-    200
   """
   def post_raw_response(domain, path, body),
     do: post_raw_response(domain, path, body, "Content-Type": "application/json")
-
-  def post_raw_response(domain, path, body, header) when is_list(body) do
-    post_raw_response(domain, path, body |> Enum.into(%{}), header)
-  end
 
   def post_raw_response(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
@@ -87,10 +80,6 @@ defmodule Json do
   end
 
   def post(domain, path, body), do: post(domain, path, body, "Content-Type": "application/json")
-
-  def post(domain, path, body, header) when is_list(body) do
-    post(domain, path, body |> Enum.into(%{}), header)
-  end
 
   def post(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
@@ -115,24 +104,14 @@ defmodule Json do
     iex> Json.put( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
     %{"data1"=> "value1"}
 
-    iex> Json.put( "https://httpbin.org", "/put?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "json" ]
-    %{"data1"=> "value1"}
-
     iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" ).status_code
     200
 
     iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
     200
-
-    iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1",  [ data1: "value1" ], "Content-Type": "application/json" ).status_code
-    200
   """
   def put_raw_response(domain, path, body),
     do: put_raw_response(domain, path, body, "Content-Type": "application/json")
-
-  def put_raw_response(domain, path, body, header) when is_list(body) do
-    put_raw_response(domain, path, body |> Enum.into(%{}), header)
-  end
 
   def put_raw_response(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
@@ -145,10 +124,6 @@ defmodule Json do
   end
 
   def put(domain, path, body), do: put(domain, path, body, "Content-Type": "application/json")
-
-  def put(domain, path, body, header) when is_list(body) do
-    put(domain, path, body |> Enum.into(%{}), header)
-  end
 
   def put(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
@@ -173,24 +148,14 @@ defmodule Json do
     iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
     %{"data1" => "value1"}
 
-    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", [ data1: "value1" ], "Content-Type": "application/json" )[ "json" ]
-    %{"data1" => "value1"}
-
     iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" ).status_code
     200
 
     iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
     200
-
-    iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1",  [ data1: "value1" ], "Content-Type": "application/json" ).status_code
-    200
   """
   def patch_raw_response(domain, path, body),
     do: patch_raw_response(domain, path, body, "Content-Type": "application/json")
-
-  def patch_raw_response(domain, path, body, header) when is_list(body) do
-    patch_raw_response(domain, path, body |> Enum.into(%{}), header)
-  end
 
   def patch_raw_response(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
@@ -203,10 +168,6 @@ defmodule Json do
   end
 
   def patch(domain, path, body), do: patch(domain, path, body, "Content-Type": "application/json")
-
-  def patch(domain, path, body, header) when is_list(body) do
-    patch(domain, path, body |> Enum.into(%{}), header)
-  end
 
   def patch(domain, path, body, header) when is_map(body) do
     {:ok, body} = body |> Jason.encode()
