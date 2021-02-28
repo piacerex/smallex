@@ -306,7 +306,7 @@ defmodule Json do
     iex> Json.head( "https://httpbin.org/", ["Content-Type": "application/json"] )
     ""
   """
-  def head(url), do: head(url, ["Content-Type": "application/json"])
+  def head(url), do: head(url, "Content-Type": "application/json")
 
   def head(url, head) when is_list(head) do
     HTTPoison.head!(url, head)
