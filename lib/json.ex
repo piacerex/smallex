@@ -76,6 +76,9 @@ defmodule Json do
     iex> Json.post( "https://httpbin.org/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
     %{"data1" => "value1"}
 
+    iex> Json.post( "https://httpbin.org/post", [data1: "value1"] , "Content-Type": "application/json" )[ "json" ]
+    %{"data1" => "value1"}
+
     iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }" )[ "args" ]
     %{"param1" => "value1"}
 
@@ -118,6 +121,11 @@ defmodule Json do
 
   def post(url, body), do: post(url, body, "Content-Type": "application/json")
 
+  def post(url, body, header) when is_list(body) do
+    post_raw_response(url, body |> Enum.into(%{}), header)
+    |> parse
+  end
+
   def post(url, body, header) when is_list(header) do
     post_raw_response(url, body, header)
     |> parse
@@ -155,6 +163,9 @@ defmodule Json do
     %{"data1"=> "value1"}
 
     iex> Json.put( "https://httpbin.org/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+    %{"data1"=> "value1"}
+
+    iex> Json.put( "https://httpbin.org/put", [data1: "value1"], "Content-Type": "application/json" )[ "json" ]
     %{"data1"=> "value1"}
 
     iex> Json.put( "https://httpbin.org/put", "{ \"data1\": \"value1\" }", %{"Content-Type": "application/json"} )[ "json" ]
@@ -199,6 +210,11 @@ defmodule Json do
 
   def put(url, body), do: put(url, body, "Content-Type": "application/json")
 
+  def put(url, body, header) when is_list(body) do
+    put_raw_response(url, body |> Enum.into(%{}), header)
+    |> parse
+  end
+
   def put(url, body, header) when is_list(header) do
     put_raw_response(url, body, header)
     |> parse
@@ -227,6 +243,9 @@ defmodule Json do
     %{"param1" => "value1"}
 
     iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "json" ]
+    %{"data1" => "value1"}
+
+    iex> Json.patch( "https://httpbin.org", "/patch", [data1: "value1"], "Content-Type": "application/json" )[ "json" ]
     %{"data1" => "value1"}
 
     iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
@@ -274,6 +293,11 @@ defmodule Json do
   end
 
   def patch(url, body), do: patch(url, body, "Content-Type": "application/json")
+
+  def patch(url, body, header) when is_list(body) do
+    patch_raw_response(url, body |> Enum.into(%{}), header)
+    |> parse
+  end
 
   def patch(url, body, header) when is_list(header) do
     patch_raw_response(url, body, header)
