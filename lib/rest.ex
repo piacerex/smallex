@@ -47,6 +47,12 @@ defmodule Rest do
     end
   end
 
+  def json_eval!( json_path, params ) do
+		File.read!( json_path )
+		|> Code.eval_string( params )
+		|> elem( 0 )
+	end
+
   @doc """
   Error body
   """
