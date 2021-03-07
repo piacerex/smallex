@@ -1,4 +1,6 @@
 defmodule Number do
+  require Decimal
+
   @moduledoc """
   Number library.
   """
@@ -40,7 +42,7 @@ defmodule Number do
   def to_number(value) when is_binary(value) == true, do: value |> String.to_float()
 
   def to_number(value),
-    do: if(Decimal.decimal?(value) == true, do: value |> Decimal.to_float(), else: value)
+    do: if(Decimal.is_decimal(value) == true, do: value |> Decimal.to_float(), else: value)
 
   @doc """
   To string
@@ -72,7 +74,7 @@ defmodule Number do
 
   def to_string(value, precision),
     do:
-      if(Decimal.decimal?(value) == true,
+      if(Decimal.is_decimal(value) == true,
         do: Decimal.to_float(value) |> Number.round(precision) |> Float.to_string()
       )
 
