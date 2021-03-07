@@ -104,15 +104,15 @@ defmodule Lst do
   end
 
   @doc """
-  Delete keyword list items by names(string)
+  Delete keyword list items by keys(string)
 
   ## Examples
-    iex> Lst.delete_by_names( [ c1: 6, c2: 7, c3: 8, c4: 9, c5: 0 ], [ "c2", "c4" ] )
-    [ c1: 6, c3: 8, c5: 0 ]
-    iex> Lst.delete_by_names( [ c1: 6, c2: 7, c3: 8, c4: 9, c5: 0 ], [ "c3", "c1" ] )
-    [ c2: 7, c4: 9, c5: 0 ]
+  	iex> Lst.delete_by_keys( [ c1: 6, c2: 7, c3: 8, c4: 9, c5: 0 ], [ "c2", "c4" ] )
+  	[ c1: 6, c3: 8, c5: 0 ]
+  	iex> Lst.delete_by_keys( [ c1: 6, c2: 7, c3: 8, c4: 9, c5: 0 ], [ "c3", "c1" ] )
+  	[ c2: 7, c4: 9, c5: 0 ]
   """
-  def delete_by_names(list, names) do
+  def delete_by_keys(list, names) do
     names |> Enum.reduce(list, fn name, acc -> Keyword.delete(acc, String.to_atom(name)) end)
   end
 
