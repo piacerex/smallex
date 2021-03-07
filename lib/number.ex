@@ -137,7 +137,9 @@ defmodule Number do
     iex> Number.add_comma( "123456.78" )
     "123,456.78"
   """
-  def add_comma(value, precision \\ 2), do: value |> Number.to_string(precision) |> _insert_comma
+  def add_comma(value, precision \\ 2),
+    do: value |> Number.to_string(precision) |> _insert_comma()
+
   defp _insert_comma(value), do: Regex.replace(~r/(\d)(?=(\d\d\d)+(?!\d))/, value, "\\1,")
 
   @doc """
@@ -153,7 +155,7 @@ defmodule Number do
     iex> Number.to_integer( "1234.56" )
     1234
   """
-  def to_integer(value), do: value |> Number.to_string() |> _head_split_dot
+  def to_integer(value), do: value |> Number.to_string() |> _head_split_dot()
 
   defp _head_split_dot(value),
     do: value |> String.split(".") |> List.first() |> String.to_integer()
@@ -178,7 +180,7 @@ defmodule Number do
     "12.35%"
   """
   def to_percent(value, precision \\ 2),
-    do: (Number.to_number(value) * 100) |> Number.to_string(precision) |> _add_percent
+    do: (Number.to_number(value) * 100) |> Number.to_string(precision) |> _add_percent()
 
   defp _add_percent(value), do: value <> "%"
 
