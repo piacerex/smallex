@@ -33,7 +33,7 @@ defmodule Smallex.Mixfile do
       {:mix_test_watch, "~> 0.6", only: :dev, runtime: false},
       {:dialyxir, "~> 0.5.1", only: :dev},
       {:timex, "~> 3.3"},
-      {:decimal, "~> 1.0"},
+      {:decimal, "~> 2.0"},
       {:httpoison, "~> 1.8"},
       {:jason, "~> 1.2"},
       {:csv, "~> 2.1"},

@@ -1,4 +1,6 @@
 defmodule Number do
+  require Decimal
+
   @moduledoc """
   Number library.
   """
@@ -19,10 +21,10 @@ defmodule Number do
   # <- default parameter function is separately declared
   def round(value, precision \\ -1)
 
-  def round(value, precision) when is_float(value) == true,
+  def round(value, precision) when is_float(value),
     do: if(precision >= 0, do: value |> Float.round(precision), else: value)
 
-  def round(value, _) when is_integer(value) == true, do: value
+  def round(value, _) when is_integer(value), do: value
 
   @doc """
   To number return float or integer)
@@ -37,10 +39,10 @@ defmodule Number do
     iex> Number.to_number( "123456.78" )
     123456.78
   """
-  def to_number(value) when is_binary(value) == true, do: value |> String.to_float()
+  def to_number(value) when is_binary(value), do: value |> String.to_float()
 
   def to_number(value),
-    do: if(Decimal.decimal?(value) == true, do: value |> Decimal.to_float(), else: value)
+    do: if(Decimal.is_decimal(value), do: value |> Decimal.to_float(), else: value)
 
   @doc """
   To string
@@ -62,17 +64,17 @@ defmodule Number do
   # <- default parameter function is separately declared
   def to_string(value, precision \\ -1)
 
-  def to_string(value, precision) when is_float(value) == true,
+  def to_string(value, precision) when is_float(value),
     do: value |> Number.round(precision) |> Float.to_string()
 
-  def to_string(value, _) when is_integer(value) == true, do: value |> Integer.to_string()
+  def to_string(value, _) when is_integer(value), do: value |> Integer.to_string()
 
-  def to_string(value, precision) when is_binary(value) == true,
+  def to_string(value, precision) when is_binary(value),
     do: value |> String.to_float() |> Number.round(precision) |> Float.to_string()
 
   def to_string(value, precision),
     do:
-      if(Decimal.decimal?(value) == true,
+      if(Decimal.is_decimal(value),
         do: Decimal.to_float(value) |> Number.round(precision) |> Float.to_string()
       )
 
@@ -135,7 +137,9 @@ defmodule Number do
     iex> Number.add_comma( "123456.78" )
     "123,456.78"
   """
-  def add_comma(value, precision \\ 2), do: value |> Number.to_string(precision) |> _insert_comma
+  def add_comma(value, precision \\ 2),
+    do: value |> Number.to_string(precision) |> _insert_comma()
+
   defp _insert_comma(value), do: Regex.replace(~r/(\d)(?=(\d\d\d)+(?!\d))/, value, "\\1,")
 
   @doc """
@@ -151,7 +155,7 @@ defmodule Number do
     iex> Number.to_integer( "1234.56" )
     1234
   """
-  def to_integer(value), do: value |> Number.to_string() |> _head_split_dot
+  def to_integer(value), do: value |> Number.to_string() |> _head_split_dot()
 
   defp _head_split_dot(value),
     do: value |> String.split(".") |> List.first() |> String.to_integer()
@@ -176,7 +180,7 @@ defmodule Number do
     "12.35%"
   """
   def to_percent(value, precision \\ 2),
-    do: (Number.to_number(value) * 100) |> Number.to_string(precision) |> _add_percent
+    do: (Number.to_number(value) * 100) |> Number.to_string(precision) |> _add_percent()
 
   defp _add_percent(value), do: value <> "%"
 
