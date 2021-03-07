@@ -79,6 +79,14 @@ defmodule Type do
 
   def is_integer_include_string(value), do: is_integer(value)
 
+  def is_datetime(value) do
+    try do
+      if Dt.to_datetime(value) |> is_map, do: true, else: false
+    catch
+      _, _ -> false
+    end
+  end
+
   @doc """
   aa
 
@@ -167,7 +175,7 @@ defmodule Type do
 
   ## Examples
     iex> Type.to_string( nil )
-    nil
+    ""
     iex> Type.to_string( 123 )
     "123"
     iex> Type.to_string( 12.34 )
@@ -176,8 +184,10 @@ defmodule Type do
     "123"
     iex> Type.to_string( "12.34" )
     "12.34"
+    iex> Type.to_string( ~N[2015-01-28 01:15:52.00] )
+    "2015-01-28T01:15:52.000Z"
   """
-  def to_string(nil), do: nil
+  def to_string(nil), do: ""
   def to_string(value) when is_binary(value), do: value
 
   def to_string(value) when is_number(value) do
@@ -187,6 +197,17 @@ defmodule Type do
       _ -> nil
     end
   end
+
+  def to_string(value) when is_map(value) do
+    if is_datetime(value) do
+      Dt.to_datetime(value) |> Dt.to_string("%Y-%0m-%0dT%0H:%0M:%0S.%0LZ")
+    else
+      inspect(value)
+    end
+  end
+
+  def to_string_datetime( value ) when is_map( value ), do: Dt.to_string( value, "%Y-%0m-%0dT%0H:%0M:%0S.%0LZ" )
+	def to_string_datetime( value ), do: value
 
   @doc """
   Possible types(not collentions)
