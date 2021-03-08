@@ -240,10 +240,19 @@ defmodule Dt do
   To yyyy/mm/dd string
 
   ## Examples
-    iex> Dt.to_ymd_string( ~N[2018-01-02 03:04:05] )
-    "2018/01/02"
+  	iex> Dt.to_ymdhms( ~N[2018-01-02 03:04:05] )
+  	"2018/01/02 03:04:05"
   """
-  def to_ymdhmsl(dt), do: dt |> to_string("%Y/%0m/%0d")
+  def to_ymdhms(dt), do: dt |> to_string("%Y/%0m/%0d %0H:%0M:%0S")
+
+  @doc """
+  To yyyy/mm/dd string
+
+  ## Examples
+  	iex> Dt.to_ymdhmsl( ~N[2018-01-02 03:04:05.012] )
+  	"2018/01/02 03:04:05.012"
+  """
+  def to_ymdhmsl(dt), do: dt |> to_string("%Y/%0m/%0d %0H:%0M:%0S.%0L")
 
   @doc """
   Hyphen to slash

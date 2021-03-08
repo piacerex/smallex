@@ -206,8 +206,10 @@ defmodule Type do
     end
   end
 
-  def to_string_datetime( value ) when is_map( value ), do: Dt.to_string( value, "%Y-%0m-%0dT%0H:%0M:%0S.%0LZ" )
-	def to_string_datetime( value ), do: value
+  def to_string_datetime(value) when is_map(value),
+    do: Dt.to_string(value, "%Y-%0m-%0dT%0H:%0M:%0S.%0LZ")
+
+  def to_string_datetime(value), do: value
 
   @doc """
   Possible types(not collentions)
