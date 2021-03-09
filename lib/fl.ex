@@ -127,101 +127,129 @@ defmodule Fl do
   def handling_ok({:ok, result}, key), do: %{key => result, "error" => ""}
   def handling_ok({:error, result}, key), do: %{key => "", "error" => handling({:error, result})}
 
-  
-	@doc """
-	Split file
+  @doc """
+  Split file
 
-	## Examples
-		iex> result = Fl.split!( "test/split_sample.txt", 2 )
-		[ "test/split_sample-0.txt", "test/split_sample-1.txt", "test/split_sample-2.txt", "test/split_sample-3.txt" ]
-		iex> result |> Enum.map( & File.rm!( &1 ) )
-		[ :ok, :ok, :ok, :ok ]
-	"""
-	def split!( path, row_unit, is_header \\ false ) do
-		stream = File.stream!( path )
+  ## Examples
+  	iex> result = Fl.split!( "test/split_sample.txt", 2 )
+  	[ "test/split_sample-0.txt", "test/split_sample-1.txt", "test/split_sample-2.txt", "test/split_sample-3.txt" ]
+  	iex> result |> Enum.map( & File.rm!( &1 ) )
+  	[ :ok, :ok, :ok, :ok ]
+  """
+  def split!(path, row_unit, is_header \\ false) do
+    stream = File.stream!(path)
 
-		row_count = stream |> Enum.count
+    row_count = stream |> Enum.count()
 
-		header = if is_header, do: Enum.take( stream, 1 ), else: []
+    header = if is_header, do: Enum.take(stream, 1), else: []
 
-		path_postfix = "." <> ( Regex.split( ~r/.*\./, path ) |> List.last )
-		path_prefix  = String.slice( path, 0..-( String.length( path_postfix ) + 1 ) )
-		split_starts = ( if is_header, do: 1, else: 0 )..( row_count + 1 ) |> Enum.take_every( row_unit )
-		split_ends   = ( row_unit - 1 + if is_header, do: 1, else: 0 )..( row_count + row_unit ) |> Enum.take_every( row_unit )
-		splits = Enum.zip( [ split_starts, split_ends ] ) 
-			|> Enum.with_index
+    path_postfix = "." <> (Regex.split(~r/.*\./, path) |> List.last())
+    path_prefix = String.slice(path, 0..-(String.length(path_postfix) + 1))
+    split_starts = if(is_header, do: 1, else: 0)..(row_count + 1) |> Enum.take_every(row_unit)
 
-			|> Enum.map( & %{ "start" => elem( elem( &1, 0 ), 0 ), "end" => elem( elem( &1, 0 ), 1 ), "path" => "#{ path_prefix }-#{ elem( &1, 1 ) }#{ path_postfix }" } )
+    split_ends =
+      (row_unit - 1 + if(is_header, do: 1, else: 0))..(row_count + row_unit)
+      |> Enum.take_every(row_unit)
 
-		splits
-		|> Enum.map( fn split -> 
-#			if !File.exists?( split[ "path" ] ) do
-				slice = header ++ ( stream |> Enum.slice( split[ "start" ]..split[ "end" ] ) )
-				if slice != [] do
-					slice
-					|> Enum.join 
-					|> write!( split[ "path" ] )
-					split[ "path" ]
-				end
-#			else
-#				split[ "path" ]
-#			end
-		end )
-		|> Enum.filter( & &1 != nil )
-	end
+    splits =
+      Enum.zip([split_starts, split_ends])
+      |> Enum.with_index()
+      |> Enum.map(
+        &%{
+          "start" => elem(elem(&1, 0), 0),
+          "end" => elem(elem(&1, 0), 1),
+          "path" => "#{path_prefix}-#{elem(&1, 1)}#{path_postfix}"
+        }
+      )
 
-	@doc """
-	Split file
+    splits
+    |> Enum.map(fn split ->
+      # 			if !File.exists?( split[ "path" ] ) do
+      slice = header ++ (stream |> Enum.slice(split["start"]..split["end"]))
 
-	## Examples
-		iex> Fl.split_csv!( "test/split_sample.csv", 1, true, true )
-		[ "test/split_sample-0.csv", "test/split_sample-1.csv", "test/split_sample-2.csv" ]
-		#iex> File.read!( "test/split_sample-1.csv" )
-		#"\"split_row-2-1\",\" split_row-\"\"2-2\"\"\"\n"
-		#iex> File.read!( "test/split_sample-2.csv" )
-		#"\"split_row-3-1\",\"split_row-\n\n3-2\""
-		iex> [ "test/split_sample-0.csv", "test/split_sample-1.csv", "test/split_sample-2.csv" ] |> Enum.map( & File.rm!( &1 ) )
-		[ :ok, :ok, :ok ]
-	"""
-	def split_csv!( path, row_unit, is_header \\ false, re_create \\ false ) do
-		stream = File.stream!( path )
-			|> CSV.decode
-			|> Stream.filter( &( elem( &1, 0 ) == :ok ) )	#TODO: apply libraried
-			|> Stream.map( & elem( &1, 1 ) 
-				|> Enum.map( fn column -> column
-					|> String.replace( "\"", "\"\"" ) 
-					|> String.replace( "\n\r\n", "\n" ) 
-				end )
-			)
+      if slice != [] do
+        slice
+        |> Enum.join()
+        |> write!(split["path"])
 
-		row_count = stream |> Enum.count
+        split["path"]
+      end
 
-		header = if is_header, do: Enum.take( stream, 1 ), else: []
+      # 			else
+      # 				split[ "path" ]
+      # 			end
+    end)
+    |> Enum.filter(&(&1 != nil))
+  end
 
-		path_postfix = "." <> ( Regex.split( ~r/.*\./, path ) |> List.last )
-		path_prefix  = String.slice( path, 0..-( String.length( path_postfix ) + 1 ) )
-		split_starts = ( if is_header, do: 1, else: 0 )..( row_count + 1 ) |> Enum.take_every( row_unit )
-		split_ends   = ( row_unit - 1 + if is_header, do: 1, else: 0 )..( row_count + row_unit ) |> Enum.take_every( row_unit )
-		splits = Enum.zip( [ split_starts, split_ends ] ) 
-			|> Enum.with_index
+  @doc """
+  Split file
 
-			|> Enum.map( & %{ "start" => elem( elem( &1, 0 ), 0 ), "end" => elem( elem( &1, 0 ), 1 ), "path" => "#{ path_prefix }-#{ elem( &1, 1 ) }#{ path_postfix }" } )
+  ## Examples
+  	iex> Fl.split_csv!( "test/split_sample.csv", 1, true, true )
+  	[ "test/split_sample-0.csv", "test/split_sample-1.csv", "test/split_sample-2.csv" ]
+  	#iex> File.read!( "test/split_sample-1.csv" )
+  	#"\"split_row-2-1\",\" split_row-\"\"2-2\"\"\"\n"
+  	#iex> File.read!( "test/split_sample-2.csv" )
+  	#"\"split_row-3-1\",\"split_row-\n\n3-2\""
+  	iex> [ "test/split_sample-0.csv", "test/split_sample-1.csv", "test/split_sample-2.csv" ] |> Enum.map( & File.rm!( &1 ) )
+  	[ :ok, :ok, :ok ]
+  """
+  def split_csv!(path, row_unit, is_header \\ false, re_create \\ false) do
+    stream =
+      File.stream!(path)
+      |> CSV.decode()
+      # TODO: apply libraried
+      |> Stream.filter(&(elem(&1, 0) == :ok))
+      |> Stream.map(
+        &(elem(&1, 1)
+          |> Enum.map(fn column ->
+            column
+            |> String.replace("\"", "\"\"")
+            |> String.replace("\n\r\n", "\n")
+          end))
+      )
 
-		splits
-		|> Enum.map( fn split -> 
-			if re_create == true || File.exists?( split[ "path" ] ) == false do
-				slice = stream |> Enum.slice( split[ "start" ]..split[ "end" ] )
-				if slice != [] do
-					header ++ slice
-					|> Stream.map( & ( &1 |> Lst.to_csv( [ quote: "\"" ] ) ) <> "\n" )
-					|> Enum.join 
-					|> write!( split[ "path" ] )
-					split[ "path" ]
-				end
-			else
-				split[ "path" ]
-			end
-		end )
-		|> Enum.filter( & &1 != nil )
-	end
+    row_count = stream |> Enum.count()
+
+    header = if is_header, do: Enum.take(stream, 1), else: []
+
+    path_postfix = "." <> (Regex.split(~r/.*\./, path) |> List.last())
+    path_prefix = String.slice(path, 0..-(String.length(path_postfix) + 1))
+    split_starts = if(is_header, do: 1, else: 0)..(row_count + 1) |> Enum.take_every(row_unit)
+
+    split_ends =
+      (row_unit - 1 + if(is_header, do: 1, else: 0))..(row_count + row_unit)
+      |> Enum.take_every(row_unit)
+
+    splits =
+      Enum.zip([split_starts, split_ends])
+      |> Enum.with_index()
+      |> Enum.map(
+        &%{
+          "start" => elem(elem(&1, 0), 0),
+          "end" => elem(elem(&1, 0), 1),
+          "path" => "#{path_prefix}-#{elem(&1, 1)}#{path_postfix}"
+        }
+      )
+
+    splits
+    |> Enum.map(fn split ->
+      if re_create == true || File.exists?(split["path"]) == false do
+        slice = stream |> Enum.slice(split["start"]..split["end"])
+
+        if slice != [] do
+          (header ++ slice)
+          |> Stream.map(&((&1 |> Lst.to_csv(quote: "\"")) <> "\n"))
+          |> Enum.join()
+          |> write!(split["path"])
+
+          split["path"]
+        end
+      else
+        split["path"]
+      end
+    end)
+    |> Enum.filter(&(&1 != nil))
+  end
 end
