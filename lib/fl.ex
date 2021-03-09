@@ -40,34 +40,60 @@ defmodule Fl do
   end
 
   @doc """
-  Write file after pipe
+  Write file available on the pipe (return is body)
 
   ## Examples
-    iex> "sample text" |> Fl.write!( "test/sample.txt" )
+    iex> "sample text" |> Fl.write!("test/sample.txt")
     "sample text"
-    iex> File.read!( "test/sample.txt" )
+    iex> File.read!("test/sample.txt")
     "sample text"
-    iex> File.rm!( "test/sample.txt" )
+    iex> File.rm!("test/sample.txt")
     :ok
   """
-  def write!(content, path, modes \\ []) when is_binary(content) do
-    File.write!(path, content, modes)
-    content
+  def write!(body, path, modes \\ []) when is_binary(body) do
+    File.write!(path, body, modes)
+    body
   end
 
   @doc """
   Read file to map with error handling (File contents are held in return[ key ], errors are held in return[ "error" ]
 
   ## Examples
-    iex> "sample text" |> Fl.write!( "test/sample.txt" )
-    iex> Fl.read_map( "raw", "test/sample.txt" )
-    %{ "raw" => "sample text", "error" => "" }
-    iex> Fl.read_map( "raw", "test/no_exist.txt" )
-    %{ "raw" => "", "error" => "no such file or directory (enoent)" }
-    iex> File.rm!( "test/sample.txt" )
+    iex> "sample text" |> Fl.write!("test/sample.txt")
+    iex> Fl.read_map("raw", "test/sample.txt")
+    %{"raw" => "sample text", "error" => ""}
+    iex> Fl.read_map( "raw", "test/no_exist.txt")
+    %{"raw" => "", "error" => "no such file or directory (enoent)"}
+    iex> File.rm!("test/sample.txt")
     :ok
   """
   def read_map(key, path), do: File.read(path) |> Fl.handling_ok(key)
+
+  @doc """
+  Read file if exist (return: empty string if not exist, "folder" if folder)
+
+  ## Examples
+    iex> "sample text" |> Fl.write!("test/sample.txt")
+    iex> Fl.read_if_exist("test/sample.txt")
+    "sample text"
+    iex> Fl.read_if_exist("test/")
+    "folder"
+    iex> Fl.read_if_exist("no_exist")
+    ""
+    iex> File.rm!("test/sample.txt")
+    :ok
+  """
+  def read_if_exist(path) do
+    if File.exists?(path) do
+      if File.dir?(path) do
+        "folder"
+      else
+        File.read!(path)
+      end
+    else
+      ""
+    end
+  end
 
   @doc """
   File result handler (2 states)
