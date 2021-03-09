@@ -222,19 +222,19 @@ defmodule Dt do
   To yyyy/mm string
 
   ## Examples
-    iex> Dt.to_ym_string( ~N[2018-01-02 03:04:05] )
+    iex> Dt.to_ym( ~N[2018-01-02 03:04:05] )
     "2018/01"
   """
-  def to_ym_string(dt), do: dt |> to_string("%Y/%0m")
+  def to_ym(dt), do: dt |> to_string("%Y/%0m")
 
   @doc """
   To yyyy/mm/dd string
 
   ## Examples
-    iex> Dt.to_ymd_string( ~N[2018-01-02 03:04:05] )
+    iex> Dt.to_ymd( ~N[2018-01-02 03:04:05] )
     "2018/01/02"
   """
-  def to_ymd_string(dt), do: dt |> to_string("%Y/%0m/%0d")
+  def to_ymd(dt), do: dt |> to_string("%Y/%0m/%0d")
 
   @doc """
   To yyyy/mm/dd string
