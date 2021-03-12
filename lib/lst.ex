@@ -209,23 +209,28 @@ defmodule Lst do
     Enum.zip(list_list, add_list) |> Enum.map(fn {list, value} -> [value] ++ list end)
   end
 
-  # TODO: テストを実行して内容に問題無いかチェック
-  # TODO: テストを実行して内容に問題無いかチェック
-  # TODO: テストを実行して内容に問題無いかチェック
-  # TODO: テストを実行して内容に問題無いかチェック
-  # TODO: テストを実行して内容に問題無いかチェック
-  # TODO: テストを実行して内容に問題無いかチェック
-
   @doc """
-  Match value in list
+  Checks containing value in list
 
   ## Examples
-    iex> Lst.match( [ "abc", "def" ], "abc" )
+    iex> Lst.contains?(["abc", "def"], "bc")
     true
-    iex> Lst.match( [ "abc", "def" ], "def" )
-    true
-    iex> Lst.match( [ "abc", "def" ], "xyz" )
+    iex> Lst.contains?(["abc", "def"], "abcd")
     false
+    iex> Lst.contains?(["abc", "def"], "def")
+    true
+    iex> Lst.contains?(["abc", "def"], "cd")
+    false
+    iex> Lst.contains?(["abc", "def"], 123)
+    nil
+    iex> Lst.contains?(["abc", "def"], ["xy", "ef"])
+    true
+    iex> Lst.contains?(["abc", "def"], ["xy", "z"])
+    false
+    iex> Lst.contains?(["abc", "def"], ["xy", ["fg", "de"], "z"])
+    true
   """
-  def match(list, value), do: Enum.any?(list, &(&1 == value))
+  def contains?(list, value)  when is_binary(value), do: Enum.any?(list, & String.contains?(&1, value))
+  def contains?(list, values) when is_list(values),  do: Enum.reduce( values, false, fn value, acc -> contains?(list, value) || acc end )
+  def contains?(_, _),                               do: nil
 end
