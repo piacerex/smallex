@@ -208,24 +208,4 @@ defmodule Lst do
   def merge(list_list, add_list) do
     Enum.zip(list_list, add_list) |> Enum.map(fn {list, value} -> [value] ++ list end)
   end
-
-  # TODO: テストを実行して内容に問題無いかチェック
-  # TODO: テストを実行して内容に問題無いかチェック
-  # TODO: テストを実行して内容に問題無いかチェック
-  # TODO: テストを実行して内容に問題無いかチェック
-  # TODO: テストを実行して内容に問題無いかチェック
-  # TODO: テストを実行して内容に問題無いかチェック
-
-  @doc """
-  Match value in list
-
-  ## Examples
-    iex> Lst.match( [ "abc", "def" ], "abc" )
-    true
-    iex> Lst.match( [ "abc", "def" ], "def" )
-    true
-    iex> Lst.match( [ "abc", "def" ], "xyz" )
-    false
-  """
-  def match(list, value), do: Enum.any?(list, &(&1 == value))
 end
