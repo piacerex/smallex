@@ -5,14 +5,14 @@ defmodule Dt do
 
   # https://hexdocs.pm/timex/Timex.Format.DateTime.Formatters.Strftime.html
 
-  def now_ym(), do: Timex.now() |> to_ym_string
-  def now_ymd(), do: Timex.now() |> to_ymd_string
+  def now_ym(), do: Timex.now() |> to_ym
+  def now_ymd(), do: Timex.now() |> to_ymd
 
   def diff_ymd_string(to, from, units),
     do: Timex.diff(Dt.to_datetime(to), to_datetime(from), units)
 
   def add_days(dt, days),
-    do: to_datetime(dt) |> Timex.add(Timex.Duration.from_days(days)) |> to_ymd_string
+    do: to_datetime(dt) |> Timex.add(Timex.Duration.from_days(days)) |> to_ymd
 
   def list_ymd(to, from),
     do:
