@@ -29,7 +29,7 @@ defmodule Smallex.Mixfile do
     [
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:earmark, "~> 1.2", only: :dev},
-      {:power_assert, "~> 0.1.1", only: :test},
+      {:power_assert, "~> 0.2.0", only: :test},
       {:mix_test_watch, "~> 0.6", only: :dev, runtime: false},
       {:dialyxir, "~> 0.5.1", only: :dev},
       {:timex, "~> 3.3"},
