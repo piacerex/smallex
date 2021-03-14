@@ -7,13 +7,72 @@ defmodule Dt do
 
   def now_ym(), do: Timex.now() |> to_ym
   def now_ymd(), do: Timex.now() |> to_ymd
+  def now_ymdhms(), do: Timex.now() |> to_ymdhms
+  def now(), do: Timex.now() |> to_ymdhmsl
+  def now_no_delimiter(), do: Timex.now() |> to_ymdhmsl_no_delimiter
 
+  @doc """
+  To yyyy/mm string
+
+  ## Examples
+    iex> Dt.to_ym(~N[2018-01-02 03:04:05])
+    "2018/01"
+  """
+  def to_ym(dt), do: dt |> to_string("%Y/%0m")
+
+  @doc """
+  To yyyy/mm/dd string
+
+  ## Examples
+    iex> Dt.to_ymd(~N[2018-01-02 03:04:05])
+    "2018/01/02"
+  """
+  def to_ymd(dt), do: dt |> to_string("%Y/%0m/%0d")
+
+  @doc """
+  To yyyy/mm/dd string
+
+  ## Examples
+    iex> Dt.to_ymdhms(~N[2018-01-02 03:04:05])
+    "2018/01/02 03:04:05"
+    iex> Dt.to_ymdhms(~D[2018-01-02])
+    "2018/01/02 00:00:00"
+  """
+  def to_ymdhms(dt), do: dt |> to_string("%Y/%0m/%0d %0H:%0M:%0S")
+
+  @doc """
+  To yyyy/mm/dd HH:MM:SS.L string
+
+  ## Examples
+    iex> Dt.to_ymdhmsl(~N[2018-01-02 03:04:05.012])
+    "2018/01/02 03:04:05.012"
+    iex> Dt.to_ymdhmsl(~N[2018-01-02 03:04:05.012345])
+    "2018/01/02 03:04:05.012345"
+    iex> Dt.to_ymdhmsl(~D[2018-01-02])
+    "2018/01/02 00:00:00."
+  """
+  def to_ymdhmsl(dt), do: dt |> to_string("%Y/%0m/%0d %0H:%0M:%0S.%L")
+
+  @doc """
+  To yyyy/mm/dd HH:MM:SS.L string
+
+  ## Examples
+    iex> Dt.to_ymdhmsl_no_delimiter(~N[2018-01-02 03:04:05.012345])
+    "20180102030405012345"
+    iex> Dt.to_ymdhmsl_no_delimiter(~D[2018-01-02])
+    "20180102000000"
+  """
+  def to_ymdhmsl_no_delimiter(dt), do: dt |> to_string("%Y%0m%0d%0H%0M%0S%L")
+
+  # TODO: add doctest
   def diff_ymd_string(to, from, units),
     do: Timex.diff(Dt.to_datetime(to), to_datetime(from), units)
 
+  # TODO: add doctest
   def add_days(dt, days),
     do: to_datetime(dt) |> Timex.add(Timex.Duration.from_days(days)) |> to_ymd
 
+  # TODO: add doctest
   def list_ymd(to, from),
     do:
       if(to < from,
@@ -217,42 +276,6 @@ defmodule Dt do
     |> hyphen_to_slash
     |> cut_second(cut_second)
   end
-
-  @doc """
-  To yyyy/mm string
-
-  ## Examples
-    iex> Dt.to_ym( ~N[2018-01-02 03:04:05] )
-    "2018/01"
-  """
-  def to_ym(dt), do: dt |> to_string("%Y/%0m")
-
-  @doc """
-  To yyyy/mm/dd string
-
-  ## Examples
-    iex> Dt.to_ymd( ~N[2018-01-02 03:04:05] )
-    "2018/01/02"
-  """
-  def to_ymd(dt), do: dt |> to_string("%Y/%0m/%0d")
-
-  @doc """
-  To yyyy/mm/dd string
-
-  ## Examples
-  	iex> Dt.to_ymdhms( ~N[2018-01-02 03:04:05] )
-  	"2018/01/02 03:04:05"
-  """
-  def to_ymdhms(dt), do: dt |> to_string("%Y/%0m/%0d %0H:%0M:%0S")
-
-  @doc """
-  To yyyy/mm/dd string
-
-  ## Examples
-  	iex> Dt.to_ymdhmsl( ~N[2018-01-02 03:04:05.012] )
-  	"2018/01/02 03:04:05.012"
-  """
-  def to_ymdhmsl(dt), do: dt |> to_string("%Y/%0m/%0d %0H:%0M:%0S.%0L")
 
   @doc """
   Hyphen to slash
