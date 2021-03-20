@@ -15,8 +15,8 @@ defmodule Dt do
   To yyyy/mm string
 
   ## Examples
-    iex> Dt.to_ym(~N[2018-01-02 03:04:05])
-    "2018/01"
+      iex> Dt.to_ym(~N[2018-01-02 03:04:05])
+      "2018/01"
   """
   def to_ym(dt), do: dt |> to_string("%Y/%0m")
 
@@ -24,8 +24,8 @@ defmodule Dt do
   To yyyy/mm/dd string
 
   ## Examples
-    iex> Dt.to_ymd(~N[2018-01-02 03:04:05])
-    "2018/01/02"
+      iex> Dt.to_ymd(~N[2018-01-02 03:04:05])
+      "2018/01/02"
   """
   def to_ymd(dt), do: dt |> to_string("%Y/%0m/%0d")
 
@@ -33,10 +33,10 @@ defmodule Dt do
   To yyyy/mm/dd string
 
   ## Examples
-    iex> Dt.to_ymdhms(~N[2018-01-02 03:04:05])
-    "2018/01/02 03:04:05"
-    iex> Dt.to_ymdhms(~D[2018-01-02])
-    "2018/01/02 00:00:00"
+      iex> Dt.to_ymdhms(~N[2018-01-02 03:04:05])
+      "2018/01/02 03:04:05"
+      iex> Dt.to_ymdhms(~D[2018-01-02])
+      "2018/01/02 00:00:00"
   """
   def to_ymdhms(dt), do: dt |> to_string("%Y/%0m/%0d %0H:%0M:%0S")
 
@@ -44,12 +44,12 @@ defmodule Dt do
   To yyyy/mm/dd HH:MM:SS.L string
 
   ## Examples
-    iex> Dt.to_ymdhmsl(~N[2018-01-02 03:04:05.012])
-    "2018/01/02 03:04:05.012"
-    iex> Dt.to_ymdhmsl(~N[2018-01-02 03:04:05.012345])
-    "2018/01/02 03:04:05.012345"
-    iex> Dt.to_ymdhmsl(~D[2018-01-02])
-    "2018/01/02 00:00:00."
+      iex> Dt.to_ymdhmsl(~N[2018-01-02 03:04:05.012])
+      "2018/01/02 03:04:05.012"
+      iex> Dt.to_ymdhmsl(~N[2018-01-02 03:04:05.012345])
+      "2018/01/02 03:04:05.012345"
+      iex> Dt.to_ymdhmsl(~D[2018-01-02])
+      "2018/01/02 00:00:00."
   """
   def to_ymdhmsl(dt), do: dt |> to_string("%Y/%0m/%0d %0H:%0M:%0S.%L")
 
@@ -57,10 +57,10 @@ defmodule Dt do
   To yyyy/mm/dd HH:MM:SS.L string
 
   ## Examples
-    iex> Dt.to_ymdhmsl_no_delimiter(~N[2018-01-02 03:04:05.012345])
-    "20180102030405012345"
-    iex> Dt.to_ymdhmsl_no_delimiter(~D[2018-01-02])
-    "20180102000000"
+      iex> Dt.to_ymdhmsl_no_delimiter(~N[2018-01-02 03:04:05.012345])
+      "20180102030405012345"
+      iex> Dt.to_ymdhmsl_no_delimiter(~D[2018-01-02])
+      "20180102000000"
   """
   def to_ymdhmsl_no_delimiter(dt), do: dt |> to_string("%Y%0m%0d%0H%0M%0S%L")
 
@@ -84,12 +84,12 @@ defmodule Dt do
   Datetime to string
 
   ## Examples
-    iex> Dt.to_string( ~N[2018-01-02 23:44:09.005], "%Y/%m/%d %H:%M:%S" )
-    "2018/01/02 23:44:09"
-    iex> Dt.to_string( ~N[2018-01-02 23:44:09.005], "%Y/%m/%d %H:%M:%S.%L" )
-    "2018/01/02 23:44:09.005"
-    iex> Dt.to_string( ~N[2018-01-02 23:44:09.005], "%Y/%m/%d %H:%M:%S", :with_status )
-    { :ok, "2018/01/02 23:44:09" }
+      iex> Dt.to_string( ~N[2018-01-02 23:44:09.005], "%Y/%m/%d %H:%M:%S" )
+      "2018/01/02 23:44:09"
+      iex> Dt.to_string( ~N[2018-01-02 23:44:09.005], "%Y/%m/%d %H:%M:%S.%L" )
+      "2018/01/02 23:44:09.005"
+      iex> Dt.to_string( ~N[2018-01-02 23:44:09.005], "%Y/%m/%d %H:%M:%S", :with_status )
+      { :ok, "2018/01/02 23:44:09" }
   """
   def to_string(dt, format_str, with_status \\ :no_status) do
     ms_treated_format_str =
@@ -114,10 +114,10 @@ defmodule Dt do
   Datetime from string
 
   ## Examples
-    iex> Dt.from_string( "2018/01/02 23:44:09", "%Y/%m/%d %H:%M:%S" )
-    ~N[2018-01-02 23:44:09]
-    iex> Dt.from_string( "2018/01/02 23:44:09", "%Y/%m/%d %H:%M:%S", :with_status )
-    { :ok, ~N[2018-01-02 23:44:09] }
+      iex> Dt.from_string( "2018/01/02 23:44:09", "%Y/%m/%d %H:%M:%S" )
+      ~N[2018-01-02 23:44:09]
+      iex> Dt.from_string( "2018/01/02 23:44:09", "%Y/%m/%d %H:%M:%S", :with_status )
+      { :ok, ~N[2018-01-02 23:44:09] }
   """
   def from_string(dt_str, format_str, with_status \\ :no_status) do
     result = Timex.parse(dt_str, format_str, :strftime)
@@ -134,88 +134,88 @@ defmodule Dt do
   Get datetime from string/tuple
 
   ## Examples
-    iex> Dt.to_datetime( "2018/1" )
-    ~N[2018-01-01 00:00:00]
-    iex> Dt.to_datetime( "2018/ 1" )
-    ~N[2018-01-01 00:00:00]
-    iex> Dt.to_datetime( "2018/01" )
-    ~N[2018-01-01 00:00:00]
-    iex> Dt.to_datetime( "2018/1/2" )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( "2018/1/2 3:4" )
-    ~N[2018-01-02 03:04:00]
-    iex> Dt.to_datetime( "2018/1/2 3:4:5" )
-    ~N[2018-01-02 03:04:05]
-    iex> Dt.to_datetime( "2018/1/2 03:04" )
-    ~N[2018-01-02 03:04:00]
-    iex> Dt.to_datetime( "2018/1/2 03:04:05" )
-    ~N[2018-01-02 03:04:05]
-    iex> Dt.to_datetime( "2018/ 1/ 2" )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( "2018/1/ 2" )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( "2018/01/ 2" )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( "2018/01/02" )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( "2018/01/02 23:44" )
-    ~N[2018-01-02 23:44:00]
-    iex> Dt.to_datetime( "2018/01/02 23:44:09" )
-    ~N[2018-01-02 23:44:09]
-    iex> Dt.to_datetime( "2018/01/02 23:44:09.005" )
-    ~N[2018-01-02 23:44:09.005]
-    iex> Dt.to_datetime( "2018-01-02" )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( "2018-01-02 23:44" )
-    ~N[2018-01-02 23:44:00]
-    iex> Dt.to_datetime( "2018-01-02 23:44:09" )
-    ~N[2018-01-02 23:44:09]
-    iex> Dt.to_datetime( "2018-01-02 23:44:09.005" )
-    ~N[2018-01-02 23:44:09.005]
-    iex> Dt.to_datetime( "Jan-02-2018" )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( "Jan-02-2018 23:44" )
-    ~N[2018-01-02 23:44:00]
-    iex> Dt.to_datetime( "Jan-02-2018 23:44:09" )
-    ~N[2018-01-02 23:44:09]
-    iex> Dt.to_datetime( "Jan-02-2018 23:44:09.005" )
-    ~N[2018-01-02 23:44:09.005]
-    iex> Dt.to_datetime( "Jan-02-18" )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( "Jan-02-18 23:44" )
-    ~N[2018-01-02 23:44:00]
-    iex> Dt.to_datetime( "Jan-02-18 23:44:09" )
-    ~N[2018-01-02 23:44:09]
-    iex> Dt.to_datetime( "Jan-02-18 23:44:09.005" )
-    ~N[2018-01-02 23:44:09.005]
-    #iex> Dt.to_datetime( "Jan-02-98" )
-    #~N[1998-01-02 00:00:00]
-    #iex> Dt.to_datetime( "Jan-02-98 23:44" )
-    #~N[1998-01-02 23:44:00]
-    #iex> Dt.to_datetime( "Jan-02-98 23:44:09" )
-    #~N[1998-01-02 23:44:09]
-    #iex> Dt.to_datetime( "Jan-02-98 23:44:09.005" )
-    #~N[1998-01-02 23:44:09.005]
-    iex> Dt.to_datetime( "January-02-2018" )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( "January-02-2018 23:44" )
-    ~N[2018-01-02 23:44:00]
-    iex> Dt.to_datetime( "January-02-2018 23:44:09" )
-    ~N[2018-01-02 23:44:09]
-    iex> Dt.to_datetime( "January-02-2018 23:44:09.005" )
-    ~N[2018-01-02 23:44:09.005]
-    iex> Dt.to_datetime( "2018-01-02 23:44:09Z" )
-    ~N[2018-01-02 23:44:09]
-    iex> Dt.to_datetime( "2018-01-02T23:44:09Z" )
-    ~N[2018-01-02 23:44:09]
-    iex> Dt.to_datetime( { 2018, 1, 2 } )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( { { 2018, 1, 2 }, { 23, 44, 9 } } )
-    ~N[2018-01-02 23:44:09]
-    iex> Dt.to_datetime( ~D[2018-01-02] )
-    ~N[2018-01-02 00:00:00]
-    iex> Dt.to_datetime( ~N[2018-01-02 23:10:07] )
-    ~N[2018-01-02 23:10:07]
+      iex> Dt.to_datetime( "2018/1" )
+      ~N[2018-01-01 00:00:00]
+      iex> Dt.to_datetime( "2018/ 1" )
+      ~N[2018-01-01 00:00:00]
+      iex> Dt.to_datetime( "2018/01" )
+      ~N[2018-01-01 00:00:00]
+      iex> Dt.to_datetime( "2018/1/2" )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( "2018/1/2 3:4" )
+      ~N[2018-01-02 03:04:00]
+      iex> Dt.to_datetime( "2018/1/2 3:4:5" )
+      ~N[2018-01-02 03:04:05]
+      iex> Dt.to_datetime( "2018/1/2 03:04" )
+      ~N[2018-01-02 03:04:00]
+      iex> Dt.to_datetime( "2018/1/2 03:04:05" )
+      ~N[2018-01-02 03:04:05]
+      iex> Dt.to_datetime( "2018/ 1/ 2" )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( "2018/1/ 2" )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( "2018/01/ 2" )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( "2018/01/02" )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( "2018/01/02 23:44" )
+      ~N[2018-01-02 23:44:00]
+      iex> Dt.to_datetime( "2018/01/02 23:44:09" )
+      ~N[2018-01-02 23:44:09]
+      iex> Dt.to_datetime( "2018/01/02 23:44:09.005" )
+      ~N[2018-01-02 23:44:09.005]
+      iex> Dt.to_datetime( "2018-01-02" )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( "2018-01-02 23:44" )
+      ~N[2018-01-02 23:44:00]
+      iex> Dt.to_datetime( "2018-01-02 23:44:09" )
+      ~N[2018-01-02 23:44:09]
+      iex> Dt.to_datetime( "2018-01-02 23:44:09.005" )
+      ~N[2018-01-02 23:44:09.005]
+      iex> Dt.to_datetime( "Jan-02-2018" )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( "Jan-02-2018 23:44" )
+      ~N[2018-01-02 23:44:00]
+      iex> Dt.to_datetime( "Jan-02-2018 23:44:09" )
+      ~N[2018-01-02 23:44:09]
+      iex> Dt.to_datetime( "Jan-02-2018 23:44:09.005" )
+      ~N[2018-01-02 23:44:09.005]
+      iex> Dt.to_datetime( "Jan-02-18" )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( "Jan-02-18 23:44" )
+      ~N[2018-01-02 23:44:00]
+      iex> Dt.to_datetime( "Jan-02-18 23:44:09" )
+      ~N[2018-01-02 23:44:09]
+      iex> Dt.to_datetime( "Jan-02-18 23:44:09.005" )
+      ~N[2018-01-02 23:44:09.005]
+      #iex> Dt.to_datetime( "Jan-02-98" )
+      #~N[1998-01-02 00:00:00]
+      #iex> Dt.to_datetime( "Jan-02-98 23:44" )
+      #~N[1998-01-02 23:44:00]
+      #iex> Dt.to_datetime( "Jan-02-98 23:44:09" )
+      #~N[1998-01-02 23:44:09]
+      #iex> Dt.to_datetime( "Jan-02-98 23:44:09.005" )
+      #~N[1998-01-02 23:44:09.005]
+      iex> Dt.to_datetime( "January-02-2018" )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( "January-02-2018 23:44" )
+      ~N[2018-01-02 23:44:00]
+      iex> Dt.to_datetime( "January-02-2018 23:44:09" )
+      ~N[2018-01-02 23:44:09]
+      iex> Dt.to_datetime( "January-02-2018 23:44:09.005" )
+      ~N[2018-01-02 23:44:09.005]
+      iex> Dt.to_datetime( "2018-01-02 23:44:09Z" )
+      ~N[2018-01-02 23:44:09]
+      iex> Dt.to_datetime( "2018-01-02T23:44:09Z" )
+      ~N[2018-01-02 23:44:09]
+      iex> Dt.to_datetime( { 2018, 1, 2 } )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( { { 2018, 1, 2 }, { 23, 44, 9 } } )
+      ~N[2018-01-02 23:44:09]
+      iex> Dt.to_datetime( ~D[2018-01-02] )
+      ~N[2018-01-02 00:00:00]
+      iex> Dt.to_datetime( ~N[2018-01-02 23:10:07] )
+      ~N[2018-01-02 23:10:07]
   """
   def to_datetime(str) when is_binary(str) do
     [
@@ -262,10 +262,10 @@ defmodule Dt do
   To JST string from UTC
 
   ## Examples
-    iex> Dt.to_jst( "2018/1/2 10:23:45" )
-    "2018/01/02 19:23"
-    iex> Dt.to_jst( "2018/1/2 15:23:45" )
-    "2018/01/03 00:23"
+      iex> Dt.to_jst( "2018/1/2 10:23:45" )
+      "2018/01/02 19:23"
+      iex> Dt.to_jst( "2018/1/2 15:23:45" )
+      "2018/01/03 00:23"
   """
   def to_jst(utc, cut_second \\ :cut_second) do
     utc
@@ -281,10 +281,10 @@ defmodule Dt do
   Hyphen to slash
 
   ## Examples
-    iex> Dt.hyphen_to_slash( "2018-01-02 03:04:05" )
-    "2018/01/02 03:04:05"
-    iex> Dt.hyphen_to_slash( "2018/01/02 03:04:05" )
-    "2018/01/02 03:04:05"
+      iex> Dt.hyphen_to_slash( "2018-01-02 03:04:05" )
+      "2018/01/02 03:04:05"
+      iex> Dt.hyphen_to_slash( "2018/01/02 03:04:05" )
+      "2018/01/02 03:04:05"
   """
   def hyphen_to_slash(str), do: str |> String.replace("-", "/")
 
@@ -292,10 +292,10 @@ defmodule Dt do
   Slash to hyphen
 
   ## Examples
-    iex> Dt.slash_to_hyphen( "2018/01/02 03:04:05" )
-    "2018-01-02 03:04:05"
-    iex> Dt.slash_to_hyphen( "2018-01-02 03:04:05" )
-    "2018-01-02 03:04:05"
+      iex> Dt.slash_to_hyphen( "2018/01/02 03:04:05" )
+      "2018-01-02 03:04:05"
+      iex> Dt.slash_to_hyphen( "2018-01-02 03:04:05" )
+      "2018-01-02 03:04:05"
   """
   def slash_to_hyphen(str), do: str |> String.replace("/", "-")
 

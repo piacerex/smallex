@@ -7,32 +7,32 @@ defmodule Type do
   Type check
 
   ## Examples
-    iex> Type.is( nil )
-    "nil"
-    iex> Type.is( "v1" )
-    "String"
-    iex> Type.is( "2" )
-    "Integer"
-    iex> Type.is( 2 )
-    "Integer"
-    iex> Type.is( "true" )
-    "Boolean"
-    iex> Type.is( true )
-    "Boolean"
-    iex> Type.is( "false" )
-    "Boolean"
-    iex> Type.is( false )
-    "Boolean"
-    iex> Type.is( "12.34" )
-    "Float"
-    iex> Type.is( 12.34 )
-    "Float"
-    iex> Type.is( %{ "cs" => "v1", "ci" => "2", "cb" => "true", "cf" => "12.34" } )
-    %{ "cs" => "String", "ci" => "Integer", "cb" => "Boolean", "cf" => "Float" }
-    iex> Type.is( %{ "cs" => "v1", "ci" => 2, "cb" => true, "cf" => 12.34 } )
-    %{ "cs" => "String", "ci" => "Integer", "cb" => "Boolean", "cf" => "Float" }
-    iex> Type.is( [ "v1", 2, true, 12.34 ] )
-    [ "String", "Integer", "Boolean", "Float" ]
+      iex> Type.is( nil )
+      "nil"
+      iex> Type.is( "v1" )
+      "String"
+      iex> Type.is( "2" )
+      "Integer"
+      iex> Type.is( 2 )
+      "Integer"
+      iex> Type.is( "true" )
+      "Boolean"
+      iex> Type.is( true )
+      "Boolean"
+      iex> Type.is( "false" )
+      "Boolean"
+      iex> Type.is( false )
+      "Boolean"
+      iex> Type.is( "12.34" )
+      "Float"
+      iex> Type.is( 12.34 )
+      "Float"
+      iex> Type.is( %{ "cs" => "v1", "ci" => "2", "cb" => "true", "cf" => "12.34" } )
+      %{ "cs" => "String", "ci" => "Integer", "cb" => "Boolean", "cf" => "Float" }
+      iex> Type.is( %{ "cs" => "v1", "ci" => 2, "cb" => true, "cf" => 12.34 } )
+      %{ "cs" => "String", "ci" => "Integer", "cb" => "Boolean", "cf" => "Float" }
+      iex> Type.is( [ "v1", 2, true, 12.34 ] )
+      [ "String", "Integer", "Boolean", "Float" ]
   """
   def is(map) when is_map(map),
     do: map |> Enum.reduce(%{}, fn {k, v}, acc -> Map.put(acc, k, is(v)) end)
@@ -91,16 +91,16 @@ defmodule Type do
   aa
 
   ## Examples
-    iex> Type.is_empty( nil )
-    true
-    iex> Type.is_empty( "" )
-    true
-    iex> Type.is_empty( "abc" )
-    false
-    iex> Type.is_empty( 123 )
-    false
-    iex> Type.is_empty( 12.34 )
-    false
+      iex> Type.is_empty( nil )
+      true
+      iex> Type.is_empty( "" )
+      true
+      iex> Type.is_empty( "abc" )
+      false
+      iex> Type.is_empty( 123 )
+      false
+      iex> Type.is_empty( 12.34 )
+      false
   """
   def is_empty(nil), do: true
   def is_empty(""), do: true
@@ -110,18 +110,18 @@ defmodule Type do
   aa
 
   ## Examples
-    iex> Type.float( nil )
-    "NaN"
-    iex> Type.float( "" )
-    "NaN"
-    iex> Type.float( "12.34567" )
-    "12.35"
-    iex> Type.float( "12.34444" )
-    "12.34"
-    iex> Type.float( 12.34567 )
-    "12.35"
-    iex> Type.float( 12.34444 )
-    "12.34"
+      iex> Type.float( nil )
+      "NaN"
+      iex> Type.float( "" )
+      "NaN"
+      iex> Type.float( "12.34567" )
+      "12.35"
+      iex> Type.float( "12.34444" )
+      "12.34"
+      iex> Type.float( 12.34567 )
+      "12.35"
+      iex> Type.float( 12.34444 )
+      "12.34"
   """
   def float(nil), do: "NaN"
   def float(""), do: "NaN"
@@ -144,20 +144,20 @@ defmodule Type do
   aa
 
   ## Examples
-    iex> Type.to_number( nil )
-    nil
-    iex> Type.to_number( "123" )
-    123
-    iex> Type.to_number( "12.34" )
-    12.34
-    iex> Type.to_number( 123 )
-    123
-    iex> Type.to_number( 12.34 )
-    12.34
-    iex> Type.to_number( "" )
-    nil
-    iex> Type.to_number( "abc" )
-    nil
+      iex> Type.to_number( nil )
+      nil
+      iex> Type.to_number( "123" )
+      123
+      iex> Type.to_number( "12.34" )
+      12.34
+      iex> Type.to_number( 123 )
+      123
+      iex> Type.to_number( 12.34 )
+      12.34
+      iex> Type.to_number( "" )
+      nil
+      iex> Type.to_number( "abc" )
+      nil
   """
   def to_number(nil), do: nil
   def to_number(value) when is_number(value), do: value
@@ -174,18 +174,18 @@ defmodule Type do
   To string
 
   ## Examples
-    iex> Type.to_string( nil )
-    ""
-    iex> Type.to_string( 123 )
-    "123"
-    iex> Type.to_string( 12.34 )
-    "12.34"
-    iex> Type.to_string( "123" )
-    "123"
-    iex> Type.to_string( "12.34" )
-    "12.34"
-    iex> Type.to_string( ~N[2015-01-28 01:15:52.00] )
-    "2015-01-28T01:15:52.000Z"
+      iex> Type.to_string( nil )
+      ""
+      iex> Type.to_string( 123 )
+      "123"
+      iex> Type.to_string( 12.34 )
+      "12.34"
+      iex> Type.to_string( "123" )
+      "123"
+      iex> Type.to_string( "12.34" )
+      "12.34"
+      iex> Type.to_string( ~N[2015-01-28 01:15:52.00] )
+      "2015-01-28T01:15:52.000Z"
   """
   def to_string(nil), do: ""
   def to_string(value) when is_binary(value), do: value
@@ -215,28 +215,28 @@ defmodule Type do
   Possible types(not collentions)
 
   ## Examples
-    iex> Type.possible_types( "" )
-    [ "String" ]
-    iex> Type.possible_types( "1" )
-    [ "Integer", "String" ]
-    iex> Type.possible_types( 1 )
-    [ "Integer" ]
-    iex> Type.possible_types( "1.2" )
-    [ "Float", "String" ]
-    iex> Type.possible_types( 1.2 )
-    [ "Float" ]
-    iex> Type.possible_types( true )
-    [ "Boolean" ]
-    iex> Type.possible_types( "true" )
-    [ "Boolean", "String" ]
-    iex> Type.possible_types( "True" )
-    [ "Boolean", "String" ]
-    iex> Type.possible_types( false )
-    [ "Boolean" ]
-    iex> Type.possible_types( "false" )
-    [ "Boolean", "String" ]
-    iex> Type.possible_types( "False" )
-    [ "Boolean", "String" ]
+      iex> Type.possible_types( "" )
+      [ "String" ]
+      iex> Type.possible_types( "1" )
+      [ "Integer", "String" ]
+      iex> Type.possible_types( 1 )
+      [ "Integer" ]
+      iex> Type.possible_types( "1.2" )
+      [ "Float", "String" ]
+      iex> Type.possible_types( 1.2 )
+      [ "Float" ]
+      iex> Type.possible_types( true )
+      [ "Boolean" ]
+      iex> Type.possible_types( "true" )
+      [ "Boolean", "String" ]
+      iex> Type.possible_types( "True" )
+      [ "Boolean", "String" ]
+      iex> Type.possible_types( false )
+      [ "Boolean" ]
+      iex> Type.possible_types( "false" )
+      [ "Boolean", "String" ]
+      iex> Type.possible_types( "False" )
+      [ "Boolean", "String" ]
   """
   def possible_types(value) do
     [
@@ -254,18 +254,18 @@ defmodule Type do
   Is missing
 
   ## Examples
-    iex> Type.is_missing( "" )
-    true
-    iex> Type.is_missing( nil )
-    true
-    iex> Type.is_missing( "a" )
-    false
-    iex> Type.is_missing( 1 )
-    false
-    iex> Type.is_missing( 1.2 )
-    false
-    iex> Type.is_missing( true )
-    false
+      iex> Type.is_missing( "" )
+      true
+      iex> Type.is_missing( nil )
+      true
+      iex> Type.is_missing( "a" )
+      false
+      iex> Type.is_missing( 1 )
+      false
+      iex> Type.is_missing( 1.2 )
+      false
+      iex> Type.is_missing( true )
+      false
   """
   def is_missing(value), do: value == nil || value == ""
 end

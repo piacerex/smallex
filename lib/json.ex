@@ -7,23 +7,23 @@ defmodule Json do
   Get JSON API (header & map_function are optional)
 
   ## Examples
-    iex> Json.get( "https://api.github.com", "/rate_limit" )[ "rate" ][ "limit" ]
-    60
+      iex> Json.get( "https://api.github.com", "/rate_limit" )[ "rate" ][ "limit" ]
+      60
 
-    iex> Json.get("https://api.github.com/rate_limit")["rate"]["limit"]
-    60
+      iex> Json.get("https://api.github.com/rate_limit")["rate"]["limit"]
+      60
 
-    iex> Json.get("https://httpbin.org", "/get", "Content-Type": "application/json")["headers"]["Content-Type"]
-    "application/json"
+      iex> Json.get("https://httpbin.org", "/get", "Content-Type": "application/json")["headers"]["Content-Type"]
+      "application/json"
 
-    iex> Json.get("https://httpbin.org", "/get", %{"Content-Type": "application/json"})["headers"]["Content-Type"]
-    "application/json"
+      iex> Json.get("https://httpbin.org", "/get", %{"Content-Type": "application/json"})["headers"]["Content-Type"]
+      "application/json"
 
-    iex> Json.get_raw_response( "https://api.github.com", "/rate_limit" ).status_code
-    200
-    
-    iex> Json.get_raw_response( "https://api.github.com/rate_limit" ).status_code
-    200
+      iex> Json.get_raw_response( "https://api.github.com", "/rate_limit" ).status_code
+      200
+
+      iex> Json.get_raw_response( "https://api.github.com/rate_limit" ).status_code
+      200
   """
   def get_raw_response(url), do: get_raw_response(url, "Content-Type": "application/json")
 
@@ -58,44 +58,44 @@ defmodule Json do
   Post JSON API (header & map_function are optional)
 
   ## Examples
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "args" ]
-    %{"param1" => "value1"}
+      iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "args" ]
+      %{"param1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{\"data1\":\"value1\"}", "Content-Type": "application/json" )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{\"data1\":\"value1\"}", "Content-Type": "application/json" )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.post( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org/post?param1=value1", "{\"data1\":\"value1\"}", "Content-Type": "application/json" )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.post( "https://httpbin.org/post?param1=value1", "{\"data1\":\"value1\"}", "Content-Type": "application/json" )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org/post?param1=value1", "{\"data1\":\"value1\"}", %{"Content-Type": "application/json"} )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.post( "https://httpbin.org/post?param1=value1", "{\"data1\":\"value1\"}", %{"Content-Type": "application/json"} )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.post( "https://httpbin.org/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org/post", [data1: "value1"] , "Content-Type": "application/json" )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.post( "https://httpbin.org/post", [data1: "value1"] , "Content-Type": "application/json" )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }" )[ "args" ]
-    %{"param1" => "value1"}
+      iex> Json.post( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }" )[ "args" ]
+      %{"param1" => "value1"}
 
-    iex> Json.post("https://httpbin.org", "/post", %{ data1: "value1" }, %{"Content-Type": "application/json"})["headers"]["Content-Type"]
-    "application/json"
+      iex> Json.post("https://httpbin.org", "/post", %{ data1: "value1" }, %{"Content-Type": "application/json"})["headers"]["Content-Type"]
+      "application/json"
 
-    iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" ).status_code
-    200
+      iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" ).status_code
+      200
 
-    iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
-    200
-    
-    iex> Json.post_raw_response( "https://httpbin.org/post?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" ).status_code
-    200
-    
-    iex> Json.post_raw_response( "https://httpbin.org/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
-    200
+      iex> Json.post_raw_response( "https://httpbin.org", "/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
+      200
+
+      iex> Json.post_raw_response( "https://httpbin.org/post?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" ).status_code
+      200
+
+      iex> Json.post_raw_response( "https://httpbin.org/post?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
+      200
   """
   def post_raw_response(url, body),
     do: post_raw_response(url, body, "Content-Type": "application/json")
@@ -150,41 +150,41 @@ defmodule Json do
   Put JSON API (header & map_function are optional)
 
   ## Examples
-    iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "args" ]
-    %{"param1" => "value1"}
+      iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "args" ]
+      %{"param1" => "value1"}
 
-    iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" )[ "json" ]
-    %{"data1"=> "value1"}
+      iex> Json.put( "https://httpbin.org", "/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" )[ "json" ]
+      %{"data1"=> "value1"}
 
-    iex> Json.put( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
-    %{"data1"=> "value1"}
+      iex> Json.put( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+      %{"data1"=> "value1"}
 
-    iex> Json.put( "https://httpbin.org/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" )[ "json" ]
-    %{"data1"=> "value1"}
+      iex> Json.put( "https://httpbin.org/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" )[ "json" ]
+      %{"data1"=> "value1"}
 
-    iex> Json.put( "https://httpbin.org/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
-    %{"data1"=> "value1"}
+      iex> Json.put( "https://httpbin.org/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+      %{"data1"=> "value1"}
 
-    iex> Json.put( "https://httpbin.org/put", [data1: "value1"], "Content-Type": "application/json" )[ "json" ]
-    %{"data1"=> "value1"}
+      iex> Json.put( "https://httpbin.org/put", [data1: "value1"], "Content-Type": "application/json" )[ "json" ]
+      %{"data1"=> "value1"}
 
-    iex> Json.put( "https://httpbin.org/put", "{ \"data1\": \"value1\" }", %{"Content-Type": "application/json"} )[ "json" ]
-    %{"data1"=> "value1"}
+      iex> Json.put( "https://httpbin.org/put", "{ \"data1\": \"value1\" }", %{"Content-Type": "application/json"} )[ "json" ]
+      %{"data1"=> "value1"}
 
-    iex> Json.put( "https://httpbin.org/put", %{ data1: "value1" }, %{"Content-Type": "application/json"} )[ "json" ]
-    %{"data1"=> "value1"}
+      iex> Json.put( "https://httpbin.org/put", %{ data1: "value1" }, %{"Content-Type": "application/json"} )[ "json" ]
+      %{"data1"=> "value1"}
 
-    iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" ).status_code
-    200
+      iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" ).status_code
+      200
 
-    iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
-    200
+      iex> Json.put_raw_response( "https://httpbin.org", "/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
+      200
 
-    iex> Json.put_raw_response( "https://httpbin.org/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" ).status_code
-    200
+      iex> Json.put_raw_response( "https://httpbin.org/put?param1=value1", "{ \"data1\": \"value1\" }", "Content-Type": "application/json" ).status_code
+      200
 
-    iex> Json.put_raw_response( "https://httpbin.org/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
-    200
+      iex> Json.put_raw_response( "https://httpbin.org/put?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
+      200
   """
   def put_raw_response(url, body),
     do: put_raw_response(url, body, "Content-Type": "application/json")
@@ -239,29 +239,29 @@ defmodule Json do
   Patch JSON API (header & map_function are optional)
 
   ## Examples
-    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "args" ]
-    %{"param1" => "value1"}
+      iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "args" ]
+      %{"param1" => "value1"}
 
-    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.patch( "https://httpbin.org", "/patch", [data1: "value1"], "Content-Type": "application/json" )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.patch( "https://httpbin.org", "/patch", [data1: "value1"], "Content-Type": "application/json" )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.patch( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.patch( "https://httpbin.org", "/patch", "{ \"data1\":\"value1\" }", %{"Content-Type": "application/json"} )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.patch( "https://httpbin.org", "/patch", "{ \"data1\":\"value1\" }", %{"Content-Type": "application/json"} )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.patch( "https://httpbin.org", "/patch", %{ data1: "value1" }, %{"Content-Type": "application/json"} )[ "json" ]
-    %{"data1" => "value1"}
+      iex> Json.patch( "https://httpbin.org", "/patch", %{ data1: "value1" }, %{"Content-Type": "application/json"} )[ "json" ]
+      %{"data1" => "value1"}
 
-    iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" ).status_code
-    200
+      iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", "{ \"data1\":\"value1\" }", "Content-Type": "application/json" ).status_code
+      200
 
-    iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
-    200
+      iex> Json.patch_raw_response( "https://httpbin.org", "/patch?param1=value1", %{ data1: "value1" }, "Content-Type": "application/json" ).status_code
+      200
   """
   def patch_raw_response(url, body),
     do: patch_raw_response(url, body, "Content-Type": "application/json")
@@ -323,20 +323,20 @@ defmodule Json do
   Delete JSON API (header & map_function are optional)
 
   ## Examples
-    iex> Json.delete( "https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" )[ "args" ]
-    %{"param1" => "value1"}
-    
-    iex> Json.delete( "https://httpbin.org/delete?param1=value1", "Content-Type": "application/json" )[ "args" ]
-    %{"param1" => "value1"}
-    
-    iex> Json.delete( "https://httpbin.org/delete?param1=value1", %{"Content-Type": "application/json"} )[ "args" ]
-    %{"param1" => "value1"}
+      iex> Json.delete( "https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" )[ "args" ]
+      %{"param1" => "value1"}
 
-    iex> Json.delete_raw_response("https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ).status_code
-    200
+      iex> Json.delete( "https://httpbin.org/delete?param1=value1", "Content-Type": "application/json" )[ "args" ]
+      %{"param1" => "value1"}
 
-    iex> Json.delete_raw_response("https://httpbin.org/delete?param1=value1", "Content-Type": "application/json" ).status_code
-    200
+      iex> Json.delete( "https://httpbin.org/delete?param1=value1", %{"Content-Type": "application/json"} )[ "args" ]
+      %{"param1" => "value1"}
+
+      iex> Json.delete_raw_response("https://httpbin.org", "/delete?param1=value1", "Content-Type": "application/json" ).status_code
+      200
+
+      iex> Json.delete_raw_response("https://httpbin.org/delete?param1=value1", "Content-Type": "application/json" ).status_code
+      200
   """
   def delete_raw_response(url), do: delete_raw_response(url, "Content-Type": "application/json")
 
@@ -379,14 +379,14 @@ defmodule Json do
   Head JSON API (header & map_function are optional)
 
   ## Examples
-    iex> Json.head( "https://httpbin.org", "/", ["Content-Type": "application/json"] )
-    ""
+      iex> Json.head( "https://httpbin.org", "/", ["Content-Type": "application/json"] )
+      ""
 
-    iex> Json.head( "https://httpbin.org/", ["Content-Type": "application/json"] )
-    ""
+      iex> Json.head( "https://httpbin.org/", ["Content-Type": "application/json"] )
+      ""
 
-    iex> Json.head( "https://httpbin.org/", %{"Content-Type": "application/json"} )
-    ""
+      iex> Json.head( "https://httpbin.org/", %{"Content-Type": "application/json"} )
+      ""
   """
   def head(url), do: head(url, "Content-Type": "application/json")
 
