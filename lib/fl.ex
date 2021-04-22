@@ -164,20 +164,19 @@ defmodule Fl do
 
     splits
     |> Enum.map(fn split ->
-      # 			if !File.exists?( split[ "path" ] ) do
-      slice = header ++ (stream |> Enum.slice(split["start"]..split["end"]))
+      if !File.exists?(split["path"]) do
+        slice = header ++ (stream |> Enum.slice(split["start"]..split["end"]))
 
-      if slice != [] do
-        slice
-        |> Enum.join()
-        |> write!(split["path"])
+        if slice != [] do
+          slice
+          |> Enum.join()
+          |> write!(split["path"])
 
+          split["path"]
+        end
+      else
         split["path"]
       end
-
-      # 			else
-      # 				split[ "path" ]
-      # 			end
     end)
     |> Enum.filter(&(&1 != nil))
   end
