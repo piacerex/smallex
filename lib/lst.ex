@@ -3,19 +3,19 @@ defmodule Lst do
   List library.
   """
 
-  @doc """
+  @doc ~S"""
   To CSV
 
   ## Examples
       iex> Lst.to_csv( [ 1, "ab", 8, true ] )
       "1,ab,8,true"
-      # iex> Lst.to_csv( [ 1, "ab", 8, true ], :quote )
-      # "\"1\", \"ab\", \"8\", \"true\""
+      iex> Lst.to_csv( [ 1, "ab", 8, true ], :quote )
+      "\"1\",\"ab\",\"8\",\"true\""
 
       iex> Lst.to_csv( [ 1, "ab", 8, true ], [ quote: "'" ] )
       "'1','ab','8','true'"
-      # iex> Lst.to_csv( [ 1, "ab", 8, true ], [ quote: "\"" ] )
-      # "\"1\",\"ab\",\"8\",\"true\""
+      iex> Lst.to_csv( [ 1, "ab", 8, true ], [ quote: "\"" ] )
+      "\"1\",\"ab\",\"8\",\"true\""
 
       iex> Lst.to_csv( [ 1, "ab", 8, true ], [ separator: ", ", post_separator: "-- " ] )
       "1, -- ab, -- 8, -- true"
