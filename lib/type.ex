@@ -59,9 +59,19 @@ defmodule Type do
 
   def is_boolean_include_string(value), do: is_boolean(value)
 
+  @doc """
+  whether the string is able to be converted to a float number.
+
+  ## Examples
+  iex> Type.is_float_include_string("3.0")
+  true
+  iex> Type.is_float_include_string("a")
+  false
+  """
   def is_float_include_string(value) when is_binary(value) do
     try do
-      if String.to_float(value), do: true, else: false
+      _ = String.to_float(value)
+      true
     catch
       _, _ -> false
     end
@@ -69,9 +79,19 @@ defmodule Type do
 
   def is_float_include_string(value), do: is_float(value)
 
+  @doc """
+  whether the string is able to be converted to a integer number.
+
+  ## Examples
+  iex> Type.is_integer_include_string("3")
+  true
+  iex> Type.is_integer_include_string("3.0")
+  false
+  """
   def is_integer_include_string(value) when is_binary(value) do
     try do
-      if String.to_integer(value), do: true, else: false
+      _ = String.to_integer(value)
+      true
     catch
       _, _ -> false
     end

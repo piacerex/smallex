@@ -31,7 +31,7 @@ defmodule Smallex.Mixfile do
       {:earmark, "~> 1.4", only: :dev},
       {:power_assert, "~> 0.2.0", only: :test},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
-      {:dialyxir, "~> 0.5.1", only: :dev},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:timex, "~> 3.3"},
       {:decimal, "~> 2.0"},
       {:httpoison, "~> 1.8"},
