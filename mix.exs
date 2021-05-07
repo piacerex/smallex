@@ -38,7 +38,7 @@ defmodule Smallex.Mixfile do
       {:jason, "~> 1.2"},
       {:csv, "~> 2.4"},
       {:excelion, "~> 0.0.5"},
-      {:statistics, "~> 0.5.1"},
+      {:statistics, "~> 0.6.2"},
       {:git_hooks, "~> 0.5.2", only: [:test, :dev], runtime: false}
     ]
   end
