@@ -185,13 +185,13 @@ defmodule Fl do
   Split file
 
   ## Examples
-      iex> Fl.split_csv!( "test/split_sample.csv", 1, true, true )
+      iex> result = Fl.split_csv!( "test/split_sample.csv", 1, true, true )
       [ "test/split_sample-0.csv", "test/split_sample-1.csv", "test/split_sample-2.csv" ]
       iex> File.read!( "test/split_sample-1.csv" )
       "\"c1\",\"c2\"\n\"split_row-2-1\",\"split_row-\"\"2-2\"\"\"\n"
       iex> File.read!( "test/split_sample-2.csv" )
       "\"c1\",\"c2\"\n\"split_row-3-1\",\"split_row-\n\n3-2\"\n"
-      iex> [ "test/split_sample-0.csv", "test/split_sample-1.csv", "test/split_sample-2.csv" ] |> Enum.map( & File.rm!( &1 ) )
+      iex> result |> Enum.map( & File.rm!( &1 ) )
       [ :ok, :ok, :ok ]
   """
   def split_csv!(path, row_unit, is_header \\ false, re_create \\ false) do
