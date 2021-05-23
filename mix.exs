@@ -32,14 +32,14 @@ defmodule Smallex.Mixfile do
       {:power_assert, "~> 0.2.0", only: :test},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:timex, "~> 3.3"},
+      {:timex, "~> 3.6.3"},
       {:decimal, "~> 2.0"},
       {:httpoison, "~> 1.8"},
       {:jason, "~> 1.2"},
       {:csv, "~> 2.4"},
       {:excelion, "~> 0.0.5"},
       {:statistics, "~> 0.6.2"},
-      {:git_hooks, "~> 0.5.2", only: [:test, :dev], runtime: false}
+      {:git_hooks, "~> 0.6.2", only: [:test, :dev], runtime: false}
     ]
   end
 end
