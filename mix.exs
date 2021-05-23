@@ -5,7 +5,7 @@ defmodule Smallex.Mixfile do
     [
       app: :smallex,
       version: "0.2.4",
-      elixir: "~> 1.6",
+      elixir: "~> 1.8",
       description: "Elixir small utilities",
       package: [
         maintainers: ["piacere-ex"],
