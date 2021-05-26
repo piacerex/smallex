@@ -131,8 +131,14 @@ defmodule Fl do
   Split file
 
   ## Examples
+      iex> Fl.split!( "test/split_sample.txt", 2 )
+      [ "test/split_sample-0.txt", "test/split_sample-1.txt", "test/split_sample-2.txt", "test/split_sample-3.txt" ]
+      iex> "edited data" |> Fl.write!("test/split_sample-2.txt")
+      "edited data"
       iex> result = Fl.split!( "test/split_sample.txt", 2 )
       [ "test/split_sample-0.txt", "test/split_sample-1.txt", "test/split_sample-2.txt", "test/split_sample-3.txt" ]
+      iex> Fl.read_if_exist("test/split_sample-2.txt")
+      "edited data"
       iex> result |> Enum.map( & File.rm!( &1 ) )
       [ :ok, :ok, :ok, :ok ]
   """
