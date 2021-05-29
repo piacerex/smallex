@@ -64,7 +64,6 @@ defmodule Dt do
   """
   def to_ymdhmsl_no_delimiter(dt), do: dt |> to_string("%Y%0m%0d%0H%0M%0S%L")
 
-  # TODO: add doctest
   @doc """
   Get time difference from string of datetime format
 
@@ -81,7 +80,13 @@ defmodule Dt do
   def diff_ymd_string(to, from, units),
     do: Timex.diff(Dt.to_datetime(to), to_datetime(from), units)
 
-  # TODO: add doctest
+  @doc """
+  Add days in yyyy/mm/dd format
+
+  ## Examples
+    iex> Dt.add_days("2017/04/11", 2)
+    "2017/04/13"
+  """
   def add_days(dt, days),
     do: to_datetime(dt) |> Timex.add(Timex.Duration.from_days(days)) |> to_ymd
 
