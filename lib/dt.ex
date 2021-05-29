@@ -90,7 +90,18 @@ defmodule Dt do
   def add_days(dt, days),
     do: to_datetime(dt) |> Timex.add(Timex.Duration.from_days(days)) |> to_ymd
 
-  # TODO: add doctest
+  @doc """
+  List dates in yyyy/mm/dd format
+
+  ## Examples
+    iex> Dt.list_ymd(~D[2018-01-05], ~D[2018-01-01])
+    ["2018/01/05", "2018/01/04", "2018/01/03", "2018/01/02", "2018/01/01"]
+    iex> Dt.list_ymd(~D[2018-01-01], ~D[2018-01-05])
+    []
+    # FIXME: use compare function
+    # iex> Dt.list_ymd(~D[2017-12-30], ~D[2018-01-05])
+    # []
+  """
   def list_ymd(to, from),
     do:
       if(to < from,
