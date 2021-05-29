@@ -65,6 +65,19 @@ defmodule Dt do
   def to_ymdhmsl_no_delimiter(dt), do: dt |> to_string("%Y%0m%0d%0H%0M%0S%L")
 
   # TODO: add doctest
+  @doc """
+  Get time difference from string of datetime format
+
+  ## Examples
+    iex> Dt.diff_ymd_string("2017-04-12 09:08:58", "2017-04-11 19:08:58", :hours)
+    14
+    iex> Dt.diff_ymd_string("2017-04-11 19:08:58", "2017-04-12 09:08:58", :hours)
+    -14
+    iex> Dt.diff_ymd_string("2017-04-12 09:08:58", "2017-04-11 19:08:58", :minutes)
+    840
+    iex> Dt.diff_ymd_string("2017-04-14 09:08:58", "2017-04-11 19:08:58", :days)
+    2
+  """
   def diff_ymd_string(to, from, units),
     do: Timex.diff(Dt.to_datetime(to), to_datetime(from), units)
 
