@@ -94,20 +94,23 @@ defmodule Dt do
   List dates in yyyy/mm/dd format
 
   ## Examples
-    iex> Dt.list_ymd(~D[2018-01-05], ~D[2018-01-01])
-    ["2018/01/05", "2018/01/04", "2018/01/03", "2018/01/02", "2018/01/01"]
-    iex> Dt.list_ymd(~D[2018-01-01], ~D[2018-01-05])
+    iex> Dt.list_ymd(~D[2018-01-03], ~D[2017-12-30])
+    ["2018/01/03", "2018/01/02", "2018/01/01", "2017/12/31", "2017/12/30"]
+    iex> Dt.list_ymd(~N[2018-01-03 12:34:56], ~N[2017-12-30 12:34:56])
+    ["2018/01/03", "2018/01/02", "2018/01/01", "2017/12/31", "2017/12/30"]
+    iex> Dt.list_ymd(~D[2017-12-30], ~D[2018-01-05])
     []
-    # FIXME: use compare function
-    # iex> Dt.list_ymd(~D[2017-12-30], ~D[2018-01-05])
-    # []
+    iex> Dt.list_ymd(~N[2017-12-30 12:34:56], ~N[2018-01-05 12:34:56])
+    []
   """
-  def list_ymd(to, from),
-    do:
-      if(to < from,
-        do: [],
-        else: 0..diff_ymd_string(to, from, :days) |> Enum.map(&add_days(to, -&1))
-      )
+  def list_ymd(to, from) do
+    [date_to, date_from] = [to, from] |> Enum.map(&Timex.to_date(&1))
+
+    if(Date.compare(date_to, date_from) == :lt,
+      do: [],
+      else: 0..diff_ymd_string(to, from, :days) |> Enum.map(&add_days(to, -&1))
+    )
+  end
 
   @doc """
   Datetime to string
