@@ -102,11 +102,13 @@ defmodule Dt do
     []
     iex> Dt.list_ymd(~N[2017-12-30 12:34:56], ~N[2018-01-05 12:34:56])
     []
+    iex> Dt.list_ymd(~N[2018-01-01 01:23:45], ~N[2018-01-01 12:34:56])
+    []
   """
   def list_ymd(to, from) do
-    [date_to, date_from] = [to, from] |> Enum.map(&Timex.to_date(&1))
+    [date_to, date_from] = [to, from] |> Enum.map(&Timex.to_datetime(&1))
 
-    if(Date.compare(date_to, date_from) == :lt,
+    if(DateTime.compare(date_to, date_from) == :lt,
       do: [],
       else: 0..diff_ymd_string(to, from, :days) |> Enum.map(&add_days(to, -&1))
     )
